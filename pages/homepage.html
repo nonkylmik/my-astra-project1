@@ -1,527 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Asset Management</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-.welcome-banner {
-background: linear-gradient(to right, #4facfe, #00f2fe);
-color: white;
-padding: 30px 40px;
-margin: 20px;
-border-radius: 16px;
-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asset Management</title>
 
-.welcome-banner h2 {
-margin: 0;
-font-size: 28px;
-}
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-.welcome-banner p {
-margin: 8px 0 0;
-font-size: 16px;
-opacity: 0.9;
-}
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-.search-bar {
-margin: 0 20px 30px;
-display: flex;
-justify-content: center;
-}
-
-.search-bar input {
-width: 100%;
-max-width: 500px;
-padding: 14px 20px;
-font-size: 16px;
-border-radius: 12px;
-border: 1px solid #ccc;
-box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-transition: box-shadow 0.3s ease, border 0.3s ease;
-}
-
-.search-bar input:focus {
-border-color: #2c7be5;
-outline: none;
-box-shadow: 0 4px 16px rgba(44, 123, 229, 0.2);
-}
-
-.stats-cards {
-display: flex;
-flex-wrap: wrap;
-gap: 20px;
-padding: 0 20px 40px;
-justify-content: center;
-}
-
-.card {
-background-color: white;
-flex: 1 1 220px;
-max-width: 250px;
-padding: 24px;
-border-radius: 16px;
-box-shadow:
-0 4px 8px rgba(0, 0, 0, 0.05),
-0 8px 20px rgba(0, 0, 0, 0.08);
-transition: transform 0.2s ease, box-shadow 0.3s ease;
-text-align: center;
-}
-
-
-.card:hover {
-transform: translateY(-6px);
-box-shadow:
-0 8px 16px rgba(0, 0, 0, 0.07),
-0 12px 32px rgba(0, 0, 0, 0.12);
-}
-
-
-.card h3 {
-margin-bottom: 10px;
-font-size: 18px;
-}
-
-.card p {
-font-size: 26px;
-font-weight: bold;
-margin: 0;
-}
-
-.card.total h3 { color: #4facfe; }
-.card.active h3 { color: #27ae60; }
-.card.maintenance h3 { color: #f39c12; }
-.card.retired h3 { color: #e74c3c; }
-
-.search-bar {
-margin: 0 20px 30px;
-display: flex;
-flex-direction: column;
-align-items: center;
-position: relative;
-}
-
-.search-bar input {
-width: 100%;
-max-width: 500px;
-padding: 14px 20px;
-font-size: 16px;
-border-radius: 12px;
-border: 1px solid #ccc;
-box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-transition: box-shadow 0.3s ease, border 0.3s ease;
-}
-
-.search-bar input:focus {
-border-color: #2c7be5;
-outline: none;
-box-shadow: 0 4px 16px rgba(44, 123, 229, 0.2);
-}
-
-#suggestionList {
-position: absolute;
-top: 56px;
-width: 100%;
-max-width: 500px;
-background-color: white;
-list-style: none;
-padding: 0;
-margin: 4px 0 0;
-border-radius: 0 0 12px 12px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-z-index: 10;
-display: none;
-}
-
-#suggestionList li {
-padding: 10px 20px;
-cursor: pointer;
-font-size: 15px;
-border-bottom: 1px solid #eee;
-}
-
-#suggestionList li:last-child {
-border-bottom: none;
-}
-
-#suggestionList li:hover {
-background-color: #f2f9ff;
-}
-
-.activity-feed {
-margin: 0 auto 40px auto; /* auto = centers it */
-padding: 20px;
-background-color: white;
-border-radius: 16px;
-box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-max-width: 600px;
-width: 100%;
-}
-
-
-.activity-feed h3 {
-font-size: 20px;
-margin-bottom: 16px;
-color: #2c2c54;
-}
-
-.activity-feed ul {
-list-style: none;
-padding: 0;
-margin: 0;
-}
-
-.activity-feed li {
-padding: 10px 0;
-border-bottom: 1px solid #eee;
-font-size: 15px;
-display: flex;
-align-items: center;
-}
-
-.activity-feed li:last-child {
-border-bottom: none;
-}
-
-.activity-feed .icon {
-margin-right: 10px;
-font-size: 18px;
-}
-
-.header-content {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header-content h1 {
-  color: white;
-  font-size: 40px;
-  font-weight: 600;
-  margin-left: 10px; /* adjust this value to move it more or less */
-}
-
-
-
-.header-brand {
-display: flex;
-align-items: center;
-gap: 14px;
-}
-
-.logo {
-height: 80px;
-width: auto;
-border-radius: 6px;
-}
-
-.brand-name {
-font-family: 'Poppins', sans-serif;
-font-size: 30px;
-font-weight: 600;
-letter-spacing: 1px;
-}
-
-.sidebar-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.sidebar-logo img {
-  height: 100px;
-  width: auto;
-  background-color: #2c2c54; /* Matches sidebar */
-  padding: 10px;
-  border-radius: 12px;
-}
-
-.logout-container {
-  display: flex;
-  justify-content: flex-end;
-  margin: 20px 20px 0;
-}
-
-.logout-btn {
-  background-color: transparent;
-  border: 2px solid #00f2fe;
-  color: #00f2fe;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #00f2fe;
-  color: #1e1e2f;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(30, 30, 47, 0.7);
-  backdrop-filter: blur(4px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-box {
-  background: #2c2c54;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-}
-
-.modal-box h3 {
-  margin: 0 0 10px;
-  font-size: 20px;
-  color: white;
-}
-
-.modal-box p {
-  font-size: 14px;
-  color: #ccc;
-  margin-bottom: 20px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.modal-actions button {
-  flex: 1;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-  background-color: #00f2fe;
-  color: #1e1e2f;
-  transition: background 0.2s ease;
-}
-
-.modal-actions .danger {
-  background-color: #e74c3c;
-  color: white;
-}
-
-.modal-actions button:hover {
-  opacity: 0.9;
-}
-
-
-.user-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 20px 0;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-avatar {
-  background: #00f2fe;
-  color: #1e1e2f;
-  font-weight: bold;
-  font-size: 16px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-
-.welcome-msg {
-  font-size: 16px;
-  font-weight: 500;
-  color: #ddd;
-}
-
-:root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --card-bg: #ffffff;
+  <style>
+    /* Reset and Theme Variables */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+  --bg-color: #ffffff;        /* Website background white */
+  --text-color: #000000;       /* Normal text black */
+  --card-bg: #121212;          /* Cards dark */
+  --card-text-color: #ffffff;  /* Cards text white */
   --banner-bg: linear-gradient(to right, #4facfe, #00f2fe);
 }
 
 [data-theme="dark"] {
-  --bg-color: #1e1e2f;
-  --text-color: #ffffff;
-  --card-bg: #2c2c54;
+  --bg-color: #1e1e2f;         /* Website background dark */
+  --text-color: #ffffff;       /* Normal text white */
+  --card-bg: #ffffff;          /* Cards white */
+  --card-text-color: #000000;  /* Cards text black */
   --banner-bg: linear-gradient(to right, #2b2b52, #706fd3);
 }
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
 
-.card, .activity-feed, .chart-box {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-}
-
-.welcome-banner {
-  background: var(--banner-bg);
-  color: white;
-}
-
-.theme-toggle {
-  margin-top: 8px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 24px;
-}
-
-.switch input { display: none; }
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 24px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #00f2fe;
-}
-
-input:checked + .slider:before {
-  transform: translateX(22px);
-}
-
-
-/* Fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.6s ease-out both;
-}
-
-/* Icon bounce animation */
-@keyframes iconBounce {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-  100% { transform: translateY(0); }
-}
-
-
-@keyframes bellShake {
-  0% { transform: rotate(0deg); }
-  20% { transform: rotate(-15deg); }
-  40% { transform: rotate(15deg); }
-  60% { transform: rotate(-10deg); }
-  80% { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
-}
-
-.notify-shake {
-animation: bellShake 0.7s ease;
-}
-
-
-
-/* Icon hover animation trigger */
-.sidebar a:hover i {
-  animation: iconBounce 0.4s ease;
-  color: #00f2fe;
-}
-
-
-    * {
-      box-sizing: border-box;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      min-height: 100vh;
     }
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background-color: #1e1e2f;
-  color: #000000;
-  display: flex;
-  height: 100vh;
-}
-
 
     /* Sidebar */
     .sidebar {
       width: 220px;
       background-color: #2c2c54;
-      color: white;
       display: flex;
       flex-direction: column;
       padding: 20px 0;
+      color: white;
     }
-
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 40px;
-      font-size: 20px;
-    }
-
     .sidebar a {
       padding: 12px 20px;
       color: white;
       text-decoration: none;
-      display: block;
       font-size: 16px;
       transition: background 0.2s;
     }
-
     .sidebar a:hover {
       background-color: #40407a;
+    }
+    .sidebar-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    .sidebar-logo img {
+      height: 100px;
+      border-radius: 12px;
+      padding: 10px;
     }
 
     /* Main content */
@@ -529,394 +74,483 @@ body {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
+    /* Header */
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+    .header-content h1 {
+      color: white;
+      font-size: 36px;
+    }
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      background: #00f2fe;
+      color: #1e1e2f;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .logout-btn {
+      background: transparent;
+      border: 2px solid #00f2fe;
+      color: #00f2fe;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .logout-btn:hover {
+      background: #00f2fe;
+      color: #1e1e2f;
+    }
 
+    /* Theme switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+    }
+    .switch input { display: none; }
+    .slider {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ccc;
+      border-radius: 24px;
+      transition: 0.4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+    input:checked + .slider {
+      background: #00f2fe;
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Welcome banner */
+    .welcome-banner {
+      background: var(--banner-bg);
+      margin: 20px;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      color: white;
+    }
+
+    /* Search bar */
+.search-bar {
+  margin: 0 20px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1000;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 14px 20px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: var(--card-bg); /* Dynamic background */
+  color: var(--card-text-color); /* Dynamic text color */
+}
+
+.search-bar input::placeholder {
+  color: var(--card-text-color); /* Match placeholder to text color */
+  opacity: 0.6;
+}
+
+#suggestionList {
+  position: absolute;
+  top: 56px;
+  width: 100%;
+  max-width: 500px;
+  background: var(--card-bg); /* Dynamic background */
+  color: var(--card-text-color); /* Dynamic text */
+  list-style: none;
+  padding: 0;
+  margin-top: 4px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#suggestionList.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#suggestionList li {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+#suggestionList li:hover {
+  background-color: rgba(0, 242, 254, 0.2); /* A slight neon blue glow */
+}
+
+    /* Cards */
+    .stats-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 0 20px 40px;
+      gap: 20px;
+    }
+
+    .card {
+  background: var(--card-bg);
+  color: var(--card-text-color); /* ✨ NEW: Card text color */
+  padding: 24px;
+  border-radius: 16px;
+  text-align: center;
+  flex: 1 1 220px;
+  max-width: 250px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05), 0 8px 20px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+}
+
+    /* Activity feed */
+.activity-feed {
+  background: var(--card-bg);
+  color: var(--card-text-color); /* Add this to fix text color */
+  margin: 0 auto 40px;
+  padding: 20px;
+  max-width: 600px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.activity-feed h3 {
+  color: var(--card-text-color); /* Make Recent Activity title also correct */
+}
+
+.activity-feed ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity-feed li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Soft white line when card is black */
+}
+
+[data-theme="dark"] .activity-feed li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Soft black line when card is white */
+}
+
+.activity-feed li:last-child {
+  border-bottom: none;
+}
+
+
+    /* Chart Container */
     .chart-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin: 40px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 40px 20px;
     }
-
     .chart-box {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    padding: 20px;
-    width: 300px;
-    height: 350px;
-    text-align: center;
-    margin: 20px;
-    }
-
-    canvas {
-    max-width: 100%;
-    height: auto;
-    }
-
-    .chart-box h3 {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #555;
-    }
-
-    @media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        flex-direction: row;
-        width: 100%;
-        height: auto;
-        justify-content: space-around;
-    }
-
-    .sidebar a {
-        padding: 10px;
-        font-size: 14px;
-
-    }
-
-    .sidebar a i {
-        margin-right: 10px;
-    }
-
-    .sidebar a:hover i {
-        animation: iconBounce 0.4s ease;
-        color: #00f2fe; /* optional glow color */
-    }
-
-    .main-content {
-        padding-top: 0;
-    }
-    }
-
-    .notification-icon {
-position: relative;
-font-size: 18px;
-color: #ce0909;
-cursor: pointer;
-margin-left: 20px;
-transition: transform 0.2s ease;
+  background: var(--card-bg);
+  color: var(--card-text-color); /* ✨ Add this line for correct text color */
+  padding: 20px;
+  width: 300px;
+  height: 350px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 20px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
 }
 
-.notification-icon:hover {
-transform: scale(1.2);
-color: #d60707;
+.chart-box h3 {
+  color: var(--card-text-color); /* ✨ Also style the chart title */
+  margin-top: 20px;
+  font-size: 16px;
 }
 
-.notification-icon .badge {
-position: absolute;
-top: -6px;
-right: -6px;
-background-color: #ffcc00;
-color: #1e1e2f;
-font-size: 10px;
-padding: 3px 6px;
-border-radius: 50%;
-font-weight: bold;
-}
-
-</style>
+    /* Logout Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(30,30,47,0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-box {
+      background: #2c2c54;
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 400px;
+      text-align: center;
+      color: white;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .modal-actions button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .modal-actions .danger { background: #e74c3c; color: white; }
+    .modal-actions button:hover { opacity: 0.9; }
+  </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <div class="sidebar-logo">
-  <img src="../images/Astra-logo.png" alt="Astra Logo" />
-  </div>      
-<a href="homepage.html"><i class="fas fa-house"></i> Home</a>
-<a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
-<a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
-<a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
-<a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
-<a href="database.html"><i class="fas fa-database"></i> Database</a>
-<a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
-<a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
-</div>
-
-
-
-<!-- Main Content -->
-<div class="main-content fade-in">
-    <header>
-        <div class="header-content">
-        <h1>Home</h1>
-        <div class="user-bar">
-            <div class="user-info">
-            <div class="user-avatar">A</div>
-            <span class="welcome-msg">Welcome, Admin!</span>
-            </div>
-            <button class="logout-btn" onclick="logout()">Logout</button>
-            <div class="theme-toggle">
-                <label class="switch" title="Toggle dark/light mode">
-                <input type="checkbox" id="themeSwitcher" />
-                <span class="slider round"></span>
-                </label>
-                <div class="notification-icon" id="notificationIcon" title="Notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
-                </div>                                    
-            </div>
-        </div>          
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/Astra-logo.png" alt="Astra Logo">
+    </div>
+    <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
+    <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
+    <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
+    <a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
+    <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="database.html"><i class="fas fa-database"></i> Database</a>
+    <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <header class="header-content">
+      <h1>Home</h1>
+      <div class="user-bar">
+        <div class="user-avatar">A</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <label class="switch" title="Toggle dark/light mode">
+          <input type="checkbox" id="themeSwitcher">
+          <span class="slider"></span>
+        </label>
+      </div>
     </header>
-
-    <div class="welcome-banner fade-in">
+  
+    <div class="welcome-banner">
       <h2 id="welcomeUser">👋 Welcome back!</h2>
       <p>Here’s a quick look at your assets data today.</p>
     </div>
-    
-
-
-
-    <div class="search-bar fade-in">
-<input type="text" id="assetSearch" placeholder="🔍 Search assets..." oninput="showSuggestions()" />
-<ul id="suggestionList"></ul>
-</div>
-
-
-    <div class="stats-cards fade-in">
-<div class="card total">
-    <h3>📊 Total Assets</h3>
-    <p>22</p>
-</div>
-<div class="card active">
-    <h3>🟢 Active</h3>
-    <p>5</p>
-</div>
-<div class="card maintenance">
-    <h3>🛠️ Under Maintenance</h3>
-    <p>2</p>
-</div>
-<div class="card retired">
-    <h3>❌ Retired</h3>
-    <p>0</p>
-</div>
-</div>
-
-<div class="activity-feed fade-in">
-    <h3>🕘 Recent Activity</h3>
-    <ul>
-    <li><span class="icon">🛠️</span> Maintenance scheduled:  <strong>Epson Printer</strong> — <em>Today</em></li>
-    <li><span class="icon">➕</span> New asset added:  <strong>MacBook Pro</strong> — <em>1 hour ago</em></li>
-    <li><span class="icon">✅</span> Checked in:  <strong>Dell Desktop</strong> — <em>Yesterday</em></li>
-    <li><span class="icon">🗑️</span> Retired asset:  <strong>Old Server</strong> — <em>2 days ago</em></li>
-    </ul>
-</div>
-
+  
+    <div class="search-bar">
+      <input type="text" id="assetSearch" placeholder="🔍 Search assets..." oninput="showSuggestions()">
+      <ul id="suggestionList"></ul>
+    </div>
+  
+    <div class="stats-cards">
+      <div class="card total"><h3>📊 Total Assets</h3><p>22</p></div>
+      <div class="card active"><h3>🟢 Active</h3><p>5</p></div>
+      <div class="card maintenance"><h3>🛠️ Under Maintenance</h3><p>2</p></div>
+      <div class="card retired"><h3>❌ Retired</h3><p>0</p></div>
+    </div>
+  
+    <div class="activity-feed">
+      <h3>🕘 Recent Activity</h3>
+      <ul>
+        <li>🛠️ Maintenance scheduled: <strong>Epson Printer</strong> — <em>Today</em></li>
+        <li>➕ New asset added: <strong>MacBook Pro</strong> — <em>1 hour ago</em></li>
+        <li>✅ Checked in: <strong>Dell Desktop</strong> — <em>Yesterday</em></li>
+        <li>🗑️ Retired asset: <strong>Old Server</strong> — <em>2 days ago</em></li>
+      </ul>
+    </div>
+  
     <div class="chart-container">
-      <div class="chart-box">
-        <canvas id="chartType"></canvas>
-        <h3>Assets by Type</h3>
-      </div>
-      <div class="chart-box">
-        <canvas id="chartOS"></canvas>
-        <h3>Assets by OS</h3>
-      </div>
-      <div class="chart-box">
-        <canvas id="chartLocation"></canvas>
-        <h3>Assets by Location</h3>
+      <div class="chart-box"><canvas id="chartType"></canvas><h3>Assets by Type</h3></div>
+      <div class="chart-box"><canvas id="chartOS"></canvas><h3>Assets by OS</h3></div>
+      <div class="chart-box"><canvas id="chartLocation"></canvas><h3>Assets by Location</h3></div>
+    </div>
+  </div>
+  
+  <!-- Logout Modal -->
+  <div id="logoutModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Log out of Astra?</h3>
+      <div class="modal-actions">
+        <button onclick="closeLogoutModal()">Cancel</button>
+        <button class="danger" onclick="confirmLogout()">Log Out</button>
       </div>
     </div>
   </div>
-
+  
+  <!-- JavaScript Section -->
   <script>
-    // Chart 1: Assets by Type
+    // Chart Setup
     new Chart(document.getElementById('chartType'), {
       type: 'doughnut',
       data: {
         labels: ['Laptop', 'Desktop', 'Printer'],
-        datasets: [{
-          data: [21, 17, 5],
-          backgroundColor: ['#f39c12', '#3498db', '#2ecc71'],
-        }]
+        datasets: [{ data: [21, 17, 5], backgroundColor: ['#f39c12', '#3498db', '#2ecc71'] }]
       },
-      options: {
-        cutout: '60%',
-        plugins: {
-          legend: {
-            position: 'right'
-          }
-        }
-      }
+      options: { cutout: '60%', plugins: { legend: { position: 'right' } } }
     });
-
-    // Chart 2: Assets by OS
+  
     new Chart(document.getElementById('chartOS'), {
       type: 'doughnut',
       data: {
         labels: ['Windows', 'MAC', 'Linux'],
-        datasets: [{
-          data: [45, 20, 35],
-          backgroundColor: ['#27ae60', '#e67e22', '#f1c40f'],
-        }]
+        datasets: [{ data: [45, 20, 35], backgroundColor: ['#27ae60', '#e67e22', '#f1c40f'] }]
       },
-      options: {
-        cutout: '60%',
-        plugins: {
-          legend: {
-            position: 'right'
-          }
-        }
-      }
+      options: { cutout: '60%', plugins: { legend: { position: 'right' } } }
     });
-
-    // Chart 3: Assets by Location
+  
     new Chart(document.getElementById('chartLocation'), {
       type: 'doughnut',
       data: {
-        labels: ['Maakri Office', 'õpik Office', 'Rävala Office'],
-        datasets: [{
-          data: [45, 20, 35],
-          backgroundColor: ['#1abc9c', '#f39c12', '#f9ca24'],
-        }]
+        labels: ['Maakri Office', 'Õpik Office', 'Rävala Office'],
+        datasets: [{ data: [45, 20, 35], backgroundColor: ['#1abc9c', '#f39c12', '#f9ca24'] }]
       },
-      options: {
-        cutout: '60%',
-        plugins: {
-          legend: {
-            position: 'right'
-          }
-        }
+      options: { cutout: '60%', plugins: { legend: { position: 'right' } } }
+    });
+  
+    // Search Suggestions
+    const assetSuggestions = [
+      "15” Alienware - Laptop",
+      "Dell Desktop",
+      "Epson EcoTank Printer",
+      "MacBook Pro",
+      "Lenovo ThinkPad",
+      "Office Projector",
+      "Network Switch",
+      "Firewall Appliance"
+    ];
+  
+    function showSuggestions() {
+      const input = document.getElementById("assetSearch");
+      const list = document.getElementById("suggestionList");
+      const filter = input.value.toLowerCase();
+      list.innerHTML = "";
+  
+      if (filter === "") {
+        list.classList.remove("show");
+        return;
+      }
+  
+      const filtered = assetSuggestions.filter(item => item.toLowerCase().includes(filter));
+  
+      if (filtered.length === 0) {
+        list.classList.remove("show");
+        return;
+      }
+  
+      filtered.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        li.onclick = () => {
+          input.value = item;
+          list.classList.remove("show");
+        };
+        list.appendChild(li);
+      });
+  
+      list.classList.add("show");
+    }
+  
+    document.addEventListener("click", function(e) {
+      const bar = document.querySelector(".search-bar");
+      if (!bar.contains(e.target)) {
+        document.getElementById("suggestionList").classList.remove("show");
       }
     });
-  </script>
-
-<script>
-  const assetSuggestions = [
-    "15” Alienware - Laptop",
-    "Dell Desktop",
-    "Epson EcoTank Printer",
-    "MacBook Pro",
-    "Lenovo ThinkPad",
-    "Office Projector",
-    "Network Switch",
-    "Firewall Appliance"
-  ];
-
-  function showSuggestions() {
-    const input = document.getElementById("assetSearch");
-    const filter = input.value.toLowerCase();
-    const list = document.getElementById("suggestionList");
-
-    // Clear old list
-    list.innerHTML = "";
-
-    if (filter === "") {
-      list.style.display = "none";
-      return;
-    }
-
-    const filtered = assetSuggestions.filter(item =>
-      item.toLowerCase().includes(filter)
-    );
-
-    if (filtered.length === 0) {
-      list.style.display = "none";
-      return;
-    }
-
-    filtered.forEach(item => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      li.onclick = () => {
-        input.value = item;
-        list.style.display = "none";
-      };
-      list.appendChild(li);
-    });
-
-    list.style.display = "block";
-  }
-
-  // Optional: Hide suggestions if clicking outside
-  document.addEventListener("click", function (e) {
-    const bar = document.querySelector(".search-bar");
-    if (!bar.contains(e.target)) {
-      document.getElementById("suggestionList").style.display = "none";
-    }
-  });
-</script>
-
-<script>
+  
+    // Logout Modal
     function logout() {
       document.getElementById("logoutModal").style.display = "flex";
     }
-  
     function closeLogoutModal() {
       document.getElementById("logoutModal").style.display = "none";
     }
-  
     function confirmLogout() {
-  localStorage.removeItem("loggedIn");
-  window.location.href = "../index.html";
-}
-</script>
+      localStorage.removeItem("loggedIn");
+      window.location.href = "../index.html";
+    }
+  
+    // Theme Switcher
+const themeSwitcher = document.getElementById("themeSwitcher");
+const savedTheme = localStorage.getItem("theme");
 
-<!-- Logout Confirmation Modal -->
-<div id="logoutModal" class="modal-overlay">
-    <div class="modal-box">
-    <h3>Log out of Astra?</h3>
-    <p>You will be redirected to the login screen.</p>
-    <div class="modal-actions">
-        <button onclick="closeLogoutModal()">Cancel</button>
-        <button class="danger" onclick="confirmLogout()">Log Out</button>
-    </div>
-    </div>
-</div>
-
-<script>
-    const themeSwitcher = document.getElementById("themeSwitcher");
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme === "dark") {
-document.body.setAttribute("data-theme", "dark");
-themeSwitcher.checked = true;
+if (savedTheme === "dark") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  themeSwitcher.checked = true;
 }
 
 themeSwitcher.addEventListener("change", () => {
-if (themeSwitcher.checked) {
-    document.body.setAttribute("data-theme", "dark");
+  if (themeSwitcher.checked) {
+    document.documentElement.setAttribute("data-theme", "dark");
     localStorage.setItem("theme", "dark");
-} else {
-    document.body.removeAttribute("data-theme");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
     localStorage.setItem("theme", "light");
-}
+  }
 });
 
-const userRole = localStorage.getItem("role") || "Guest";
-const welcomeText = document.getElementById("welcomeUser");
-
-if (welcomeText) {
-  welcomeText.textContent = `👋 Welcome back, ${userRole.charAt(0).toUpperCase() + userRole.slice(1)}!`;
-}
-</script>
-
-<script>
+  
+    // Welcome Message
+    const userRole = localStorage.getItem("role") || "Guest";
+    const welcomeText = document.getElementById("welcomeUser");
+  
+    if (welcomeText) {
+      welcomeText.textContent = `👋 Welcome back, ${userRole.charAt(0).toUpperCase() + userRole.slice(1)}!`;
+    }
+  
     // Redirect to login if not logged in
     if (!localStorage.getItem("isLoggedIn")) {
-    window.location.href = "../index.html";
+      window.location.href = "../index.html";
     }
-</script>
-
-<script>
-    const notificationIcon = document.getElementById("notificationIcon");
-
-    const hasNotifications = true;
-
-    if (hasNotifications && notificationIcon) {
-    setInterval(() => {
-        notificationIcon.classList.add("notify-shake");
-
-        setTimeout(() => {
-        notificationIcon.classList.remove("notify-shake");
-        }, 700);
-    }, 5000);
+  </script>
+  
+  <script>
+    // Apply saved theme immediately when loading
+    if (localStorage.getItem("theme") === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
     }
-</script>  
-
-</body>
-</html>
+  </script>
+  
+  </body>
+  </html>
+  
