@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ | Astra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e2f;
+      color: white;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c2c54;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .sidebar-logo img {
+      height: 60px;
+      width: auto;
+      background-color: #2c2c54;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .sidebar a {
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover {
+      background-color: #40407a;
+    }
+
+    .sidebar a:hover i {
+      animation: iconBounce 0.4s ease;
+      color: #00f2fe;
+    }
+
+    @keyframes iconBounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+      100% { transform: translateY(0); }
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    header {
+      background: linear-gradient(to right, #2c2c54, #706fd3);
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: white;
+    }
+    
+
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      background-color: #2c2c54;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .faq-question {
+      padding: 16px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .faq-question:hover {
+      background-color: #40407a;
+    }
+
+    .faq-answer {
+      padding: 16px;
+      display: none;
+      border-top: 1px solid #444;
+      background-color: #333;
+    }
+
+    .faq-question::after {
+      content: "\f078";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      right: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-item.open .faq-question::after {
+      transform: rotate(180deg);
+    }
+
+    .faq-question {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+}
+
+.faq-icon {
+  color: #00f2fe;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(15deg) scale(1.2);
+}
+
+.faq-search-container {
+  text-align: center;
+  margin: 20px auto;
+}
+
+#faqSearchInput {
+  width: 90%;
+  max-width: 400px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: none;
+  background-color: #2c2c54;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#faqSearchInput::placeholder {
+  color: #bbb;
+}
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        height: auto;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../images/astra-logo.png" alt="Astra Logo" />
+  </div>
+  <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
+  <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
+  <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
+  <a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
+  <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+  <a href="database.html"><i class="fas fa-database"></i> Database</a>
+  <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+  <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content fade-in">
+  <header>📘 Frequently Asked Questions</header>
+
+  <div class="faq-search-container">
+    <input type="text" id="faqSearchInput" placeholder="🔍 Search FAQ..." oninput="filterFAQs()" />
+  </div>
+
+  <p id="noResults" style="display: none; color: #d84308; text-align: center; margin-top: 10px;">No matching FAQ found.</p>
+
+  
+  <div class="faq-container">
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-circle-question faq-icon"></i> How do I add a new asset?</div>
+      <div class="faq-answer">Navigate to the Asset List page and click on the "Add New Asset" button.</div>
+    </div>
+  
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-pen-to-square faq-icon"></i> How do I edit existing asset details?</div>
+      <div class="faq-answer">Go to the Asset Detail page and click the ✏️ Edit button to modify information in the modal.</div>
+    </div>
+  
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-search faq-icon"></i> Can I search through assets in the database?</div>
+      <div class="faq-answer">Yes! Use the 🔍 search bar on the Database page to quickly filter and highlight asset rows.</div>
+    </div>
+  
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-paperclip faq-icon"></i> Does Astra support file attachments?</div>
+      <div class="faq-answer">Yes. You can attach files through the Contact page using the 📎 paperclip icon.</div>
+    </div>
+  
+    <div class="faq-item">
+      <div class="faq-question"><i class="fas fa-adjust faq-icon"></i> How can I switch between light and dark mode?</div>
+      <div class="faq-answer">Toggle the theme switch at the top of the homepage (coming soon).</div>
+    </div>
+  </div>
+  
+
+<script>
+  const items = document.querySelectorAll('.faq-item');
+  items.forEach(item => {
+    item.querySelector('.faq-question').addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+  });
+</script>
+
+<script>
+    function filterFAQs() {
+      const input = document.getElementById("faqSearchInput").value.toLowerCase();
+      const items = document.querySelectorAll('.faq-item');
+      let matchCount = 0;
+  
+      items.forEach(item => {
+        const question = item.querySelector('.faq-question').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+        const isMatch = question.includes(input) || answer.includes(input);
+  
+        item.style.display = isMatch ? "block" : "none";
+        if (isMatch) matchCount++;
+      });
+  
+      document.getElementById("noResults").style.display = matchCount === 0 ? "block" : "none";
+    }
+  </script>
+  
+</body>
+</html>

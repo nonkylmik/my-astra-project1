@@ -1,0 +1,20 @@
+{
+    "assets": [
+    {
+        "id": "s/n: 0XP3W-Q27VU",
+        "name": "15” Alienware – Laptop",
+        "cost": 1500,
+        "created": "2020-01-08",
+        "startServiceDate": "2025-01-08",
+        "checkInDate": "2025-02-08",
+        "lifespanYears": 3,
+        "intervalDays": 30,
+        "lastMaintenance": "2024-10-12",
+        "endOfLife": "2027-01-08",
+        "vendor": "Dell",
+        "group": "Laptop",
+        "purchased": "2024-01-08",
+        "image": "https://www.pngall.com/wp-content/uploads/3/Alienware-Laptop-PNG-Image.png"
+    }
+    ]
+}

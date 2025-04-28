@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asset Detail</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: #000;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c2c54;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-logo img {
+      max-height: 60px;
+      max-width: 120px;
+      object-fit: contain;
+      background-color: #2c2c54;
+      padding: 8px;
+      border-radius: 12px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+    }
+
+    .sidebar a:hover {
+      background-color: #40407a;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+    }
+
+    header {
+      background: linear-gradient(to right, #2c2c54, #706fd3);
+      color: white;
+      padding: 30px 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .breadcrumb {
+      background-color: white;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: #555;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .detail-container {
+      background-color: white;
+      padding: 30px;
+      margin: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .detail-warning {
+      color: red;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .detail-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .detail-column {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .detail-column p {
+      margin: 8px 0;
+    }
+
+    .detail-image {
+      max-width: 200px;
+      border-radius: 8px;
+    }
+
+    .edit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #2c7be5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .edit-btn:hover {
+      background-color: #1a5dc1;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      color: black;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .modal button {
+      background-color: #2c7be5;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .modal button:hover {
+      background-color: #1a5dc1;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      font-size: 22px;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../images/astra-logo.png" alt="Astra Logo" />
+  </div>
+  <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
+  <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
+  <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
+  <a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
+  <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+  <a href="database.html"><i class="fas fa-database"></i> Database</a>
+  <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+  <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <header>Asset Detail</header>
+  <div class="breadcrumb">Home &gt; Database &gt; Detail</div>
+
+  <div class="detail-container" id="assetDetails">
+    <p>Loading asset...</p>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModalOverlay">
+  <div class="modal">
+    <span class="close-btn" onclick="closeEditModal()">×</span>
+    <h2>Edit Asset</h2>
+    <input type="number" id="editCostPrice" placeholder="Cost (€)" />
+    <input type="number" id="editLifespan" placeholder="Lifespan (Years)" />
+    <input type="text" id="editVendor" placeholder="Vendor" />
+    <button onclick="saveChanges()">💾 Save</button>
+  </div>
+</div>
+
+<script src="../assets/script.js"></script>
+<script>
+  function openEditModal() {
+    document.getElementById("editModalOverlay").style.display = "flex";
+  }
+
+  function closeEditModal() {
+    document.getElementById("editModalOverlay").style.display = "none";
+  }
+
+  function saveChanges() {
+    const cost = document.getElementById("editCostPrice").value;
+    const lifespan = document.getElementById("editLifespan").value;
+    const vendor = document.getElementById("editVendor").value;
+
+    document.getElementById("costPrice").textContent = `${cost}€`;
+    document.getElementById("lifespan").textContent = `${lifespan} years`;
+    document.getElementById("vendor").textContent = vendor;
+
+    closeEditModal();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sn = new URLSearchParams(window.location.search).get("sn");
+    const container = document.getElementById("assetDetails");
+    if (!sn || typeof devices === "undefined") {
+      container.innerHTML = `<p style="color:red;">No asset ID provided or data not available.</p>`;
+      return;
+    }
+
+    const device = devices.find(d => d.id === sn);
+    if (!device) {
+      container.innerHTML = `<p style="color:red;">Asset not found!</p>`;
+      return;
+    }
+
+    container.innerHTML = `
+      <p class="detail-warning">This asset is reaching its lifespan and should be replaced!</p>
+      <div class="detail-row">
+        <div class="detail-column">
+          <h3>${device.name}</h3>
+          <p><strong>Asset ID:</strong> ${device.id}</p>
+          <p><strong>Cost price:</strong> <span id="costPrice">${device.cost}€</span></p>
+          <p><strong>Created on:</strong> ${device.created}</p>
+          <p><strong>Start service date:</strong> ${device.startServiceDate}</p>
+          <p><strong>Check-in date:</strong> ${device.checkInDate}</p>
+          <p><strong>Lifespan:</strong> <span id="lifespan">${device.lifespanYears} years</span></p>
+          <p><strong>End of life:</strong> ${device.endOfLife}</p>
+          <p><strong>Vendor:</strong> <span id="vendor">${device.vendor}</span></p>
+          <p><strong>Group:</strong> ${device.group}</p>
+          <p><strong>Purchased on:</strong> ${device.purchased}</p>
+          <button class="edit-btn" onclick="openEditModal()">✏️ Edit</button>
+        </div>
+        <img class="detail-image" src="${device.image}" alt="${device.name}" />
+      </div>
+    `;
+
+    // Prefill modal
+    document.getElementById("editCostPrice").value = device.cost;
+    document.getElementById("editLifespan").value = device.lifespanYears;
+    document.getElementById("editVendor").value = device.vendor;
+  });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const sn = params.get("sn");
+      if (!sn) return;
+  
+      try {
+        const res = await fetch("http://localhost:3000/assets");
+        const data = await res.json();
+        const device = data.find(d => d.id === sn);
+  
+        if (!device) {
+          document.querySelector(".detail-container").innerHTML = "<p style='color:red;'>Device not found!</p>";
+          return;
+        }
+  
+        document.querySelector(".detail-container").innerHTML = `
+          <p class="detail-warning">This asset is reaching its lifespan and should be replaced!</p>
+          <div class="detail-row">
+            <div class="detail-column">
+              <h3>${device.name}</h3>
+              <p><strong>Asset ID:</strong> ${device.id}</p>
+              <p><strong>Cost price:</strong> <span id="costPrice">${device.cost}€</span></p>
+              <p><strong>Created on:</strong> ${device.created}</p>
+              <p><strong>Start service date:</strong> ${device.startServiceDate}</p>
+              <p><strong>Check-in date:</strong> ${device.checkInDate}</p>
+              <p><strong>Lifespan:</strong> <span id="lifespan">${device.lifespanYears} years</span></p>
+              <p><strong>End of life:</strong> ${device.endOfLife}</p>
+              <p><strong>Vendor:</strong> <span id="vendor">${device.vendor}</span></p>
+              <p><strong>Group:</strong> ${device.group}</p>
+              <p><strong>Purchased on:</strong> ${device.purchased}</p>
+              <button class="edit-btn" onclick="openEditModal()">✏️ Edit</button>
+            </div>
+            <img class="detail-image" src="${device.image}" alt="${device.name}" />
+          </div>
+        `;
+  
+        // Prefill modal fields
+        document.getElementById("editCostPrice").value = device.cost;
+        document.getElementById("editLifespan").value = device.lifespanYears;
+        document.getElementById("editVendor").value = device.vendor;
+  
+      } catch (err) {
+        console.error("Failed to fetch device data:", err);
+      }
+    });
+  </script>
+  
+</body>
+</html>

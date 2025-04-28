@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Database | Astra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: white;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c2c54;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .sidebar-logo img {
+      max-height: 60px;
+      max-width: 120px;
+      width: 100%;
+      object-fit: contain;
+      background-color: #2c2c54;
+      padding: 8px;
+      border-radius: 12px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      width: 100%;
+      display: block;
+    }
+
+    .sidebar a:hover {
+      background-color: #40407a;
+    }
+
+    .sidebar a:hover i {
+      animation: iconBounce 0.4s ease;
+      color: #00f2fe;
+    }
+
+    @keyframes iconBounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+      100% { transform: translateY(0); }
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(to right, #2c2c54, #706fd3);
+      color: white;
+      padding: 30px 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .breadcrumb {
+      background-color: white;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .database-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .add-asset-btn {
+      background: #00f2fe;
+      color: #1e1e2f;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .add-asset-btn:hover {
+      background: #0df;
+      transform: translateY(-2px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #2c2c54;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #3c3c5a;
+    }
+
+    th {
+      background-color: #3a3a5a;
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: #383868;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      color: black;
+      position: relative;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .modal button {
+      background-color: #2c7be5;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .modal button:hover {
+      background-color: #1a5dc1;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+
+    #searchInput {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../images/astra-logo.png" alt="Astra Logo" />
+  </div>
+  <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
+  <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
+  <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
+  <a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
+  <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+  <a href="database.html"><i class="fas fa-database"></i> Database</a>
+  <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+  <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+</div>
+
+<div class="main-content fade-in">
+  <header>Asset Database</header>
+  <div class="breadcrumb">Home &gt; Database</div>
+
+  <div class="database-actions">
+    <button class="add-asset-btn" onclick="openModal()">➕ Add Asset</button>
+  </div>
+
+  <input type="text" id="searchInput" oninput="filterTable()" placeholder="🔍 Search assets..." />
+
+  <table>
+    <thead>
+      <tr>
+        <th>Asset Name</th>
+        <th>ID</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Last Updated</th>
+      </tr>
+    </thead>
+    <tbody id="databaseTableBody">
+      <tr><td><a href="detail.html?sn=980">Dell Desktop</a></td><td>#980</td><td>Ravala Office</td><td>Active</td><td>2025-04-10</td></tr>
+      <tr><td><a href="detail.html?sn=981">MacBook Pro</a></td><td>#981</td><td>Üpik Office</td><td>Maintenance</td><td>2025-04-08</td></tr>
+      <tr><td><a href="detail.html?sn=982">Firewall Appliance</a></td><td>#982</td><td>Maakri</td><td>Retired</td><td>2025-03-29</td></tr>
+      <tr><td><a href="detail.html?sn=983">Alienware 15 Laptop</a></td><td>#983</td><td>Üpik Office</td><td>Active</td><td>2025-04-09</td></tr>
+      <tr><td><a href="detail.html?sn=984">HP LaserJet Pro M404</a></td><td>#984</td><td>Maakri Office</td><td>Maintenance</td><td>2025-04-07</td></tr>
+      <tr><td><a href="detail.html?sn=985">Lenovo ThinkPad X1</a></td><td>#985</td><td>Ravala Office</td><td>Active</td><td>2025-04-10</td></tr>
+      <tr><td><a href="detail.html?sn=986">Office Projector X200</a></td><td>#986</td><td>Üpik Office</td><td>Retired</td><td>2025-03-25</td></tr>
+      <tr><td><a href="detail.html?sn=987">Synology NAS DS920+</a></td><td>#987</td><td>Maakri Office</td><td>Active</td><td>2025-04-02</td></tr>
+      <tr><td><a href="detail.html?sn=988">Mac Mini M2</a></td><td>#988</td><td>Ravala Office</td><td>Active</td><td>2025-04-05</td></tr>
+      <tr><td><a href="detail.html?sn=989">Dell Server R740</a></td><td>#989</td><td>Üpik Office</td><td>Maintenance</td><td>2025-04-01</td></tr>
+    </tbody>    
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <span class="close-btn" onclick="closeModal()">×</span>
+    <h2>Add New Asset</h2>
+    <input type="text" placeholder="Asset Name" />
+    <input type="text" placeholder="Asset ID" />
+    <input type="text" placeholder="Location" />
+    <input type="text" placeholder="Status" />
+    <input type="date" placeholder="Last Updated" />
+    <button onclick="alert('Save functionality coming soon')">💾 Save</button>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById("modalOverlay").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+  }
+
+  function filterTable() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#databaseTableBody tr");
+
+    rows.forEach(row => {
+      const cells = row.querySelectorAll("td");
+      let match = false;
+
+      cells.forEach(cell => {
+        const text = cell.textContent.toLowerCase();
+        match = match || text.includes(input);
+      });
+
+      row.style.display = match ? "" : "none";
+    });
+  }
+</script>
+
+<script>
+  fetch('http://localhost:3000/assets')
+    .then(response => response.json())
+    .then(data => {
+      console.log('Assets loaded:', data);
+  
+      const tableBody = document.getElementById('databaseTableBody');
+      tableBody.innerHTML = ''; // Clear existing rows first
+  
+      data.forEach(asset => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><a href="detail.html?sn=${asset.id}">${asset.name}</a></td>
+          <td>#${asset.id}</td>
+          <td>${asset.vendor || 'Unknown'}</td>
+          <td>${asset.status}</td>
+          <td>${asset.maintenance_date.split('T')[0]}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error('Error loading assets:', error);
+    });
+  </script>
+  
+</body>
+</html>
