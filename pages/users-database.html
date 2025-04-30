@@ -201,5 +201,29 @@ function deleteUser(index) {
 document.addEventListener("DOMContentLoaded", loadUsers);
 </script>
 
+<script>
+    fetch('http://localhost:3000/users')
+      .then(response => response.json())
+      .then(data => {
+        const tableBody = document.getElementById('userTableBody');
+        tableBody.innerHTML = '';
+    
+        data.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>${user.created_at.split('T')[0]}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Failed to load users:', error);
+      });
+    </script>
+    
 </body>
 </html>

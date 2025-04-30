@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register | Astra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: url("../images/Astra-login.png") no-repeat center center / cover;
+      color: #fff;
+      padding: 0 20px;
+    }
+
+    .wrapper {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #fff;
+    }
+
+    .input-field {
+      position: relative;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .input-field input,
+    .input-field select {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .input-field label {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      color: #ccc;
+      font-size: 16px;
+      pointer-events: none;
+      transition: 0.2s;
+    }
+
+    .input-field input:focus ~ label,
+    .input-field input:valid ~ label,
+    .input-field select:focus ~ label,
+    .input-field select:valid ~ label {
+      top: -10px;
+      font-size: 13px;
+      color: #00f2fe;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00f2fe;
+      border: none;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0df;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #eee;
+    }
+
+    .login-link a {
+      color: #00f2fe;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .success, .error {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .success { color: #00ffb3; }
+    .error { color: #ff4d4d; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <form onsubmit="handleRegister(event)">
+      <h2>Registreeru</h2>
+      <div class="input-field">
+        <input type="text" id="name" required>
+        <label>Täisnimi</label>
+      </div>
+      <div class="input-field">
+        <input type="email" id="email" required>
+        <label>Email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" id="password" required>
+        <label>Parool</label>
+      </div>
+      <div class="input-field">
+        <select id="role">
+            <option value="" disabled selected hidden>Vali roll (valikuline)</option>
+            <option value="Admin">Admin</option>
+            <option value="Manager">Manager</option>
+            <option value="Technician">Technician</option>
+          </select>          
+        </select>
+        <label>Roll</label>
+      </div>
+      <button type="submit">Registreeru</button>
+      <div id="message" class="success" style="display:none;">Konto loodud edukalt!</div>
+      <div id="error" class="error" style="display:none;">Midagi läks valesti. Proovi uuesti.</div>
+      <div class="login-link">
+        <p>Olete juba kasutaja? <a href="../index.html">Logi sisse</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function handleRegister(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      let role = document.getElementById("role").value;
+if (!role) role = "Külastaja";
+
+      const user = { name, email, password, role };
+
+      fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === 'User registered') {
+          document.getElementById("message").style.display = 'block';
+          document.getElementById("error").style.display = 'none';
+        } else {
+          throw new Error();
+        }
+      })
+      .catch(() => {
+        document.getElementById("error").style.display = 'block';
+        document.getElementById("message").style.display = 'none';
+      });
+    }
+  </script>
+</body>
+</html>
