@@ -1,99 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Asset List | My Astra Project</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="../assets/styles.css" />
+  <meta charset="UTF-8" />
+  <title>Asset List | My Astra Project</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+  .status-active {
+    background-color: #2ecc71;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
+  }
+  .status-inactive {
+    background-color: #e74c3c;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
+  }
+  .status-maintenance {
+    background-color: #f1c40f;
+    color: #1e1e2f;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
+  }</style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="sidebar">
-    <div class="sidebar-logo">
-    <img src="../images/Astra-logo.png" alt="Astra Logo" />
-    </div>
-    <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
-    <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
-    <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
-    <a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
-    <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
-    <a href="database.html"><i class="fas fa-database"></i> Database</a>
-    <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
-    <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+  <div class="sidebar-logo">
+    <img src="../images/Astra-logo.png" alt="Bro Logo" />
+  </div>
+  <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
+  <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
+  <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a>
+  <a href="detail.html"><i class="fas fa-file-alt"></i> View Details</a>
+  <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+  <a href="database.html"><i class="fas fa-database"></i> Database</a>
+  <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+  <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
 </div>
 
 <!-- Main Content -->
 <div class="main-content fade-in">
-    <header>
+  <header>
     <span class="brand-name">Asset List</span>
-    </header>
+  </header>
 
-    <div class="breadcrumb">Home &gt; Asset List</div>
+  <div class="breadcrumb">Home &gt; Asset List</div>
 
-    <div class="content">
-        <button id="addAssetBtn" class="add-button" onclick="openModal()">Add new item</button>
+  <div class="content">
+    <button id="addAssetBtn" class="add-button" onclick="openModal()">Add new item</button>
 
     <table>
-        <thead>
+      <thead>
         <tr>
-            <th>Asset ID</th>
-            <th>Asset Name</th>
-            <th>Purchase Date</th>
-            <th>Lifespan Years</th>
-            <th>Maintenance Interval (Days)</th>
-            <th>Last Maintenance Date</th>
-            <th>Status</th>
+          <th>Asset ID</th>
+          <th>Asset Name</th>
+          <th>Purchase Date</th>
+          <th>Lifespan Years</th>
+          <th>Maintenance Interval (Days)</th>
+          <th>Last Maintenance Date</th>
+          <th>Status</th>
         </tr>
-        </thead>
-        <tbody id="asset-table-body">
-        <!-- Existing static rows here, or dynamic JS rows later -->
-        </tbody>
+      </thead>
+      <tbody id="asset-table-body">
+        <!-- Dynamic rows injected by JavaScript -->
+      </tbody>
     </table>
-    </div>
+  </div>
 </div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
-    <div class="modal fade-in" id="modalBox">
+  <div class="modal fade-in" id="modalBox">
     <span class="close-btn" onclick="closeModal()">×</span>
     <h2>Add New Asset</h2>
-<form id="assetForm">
-<label>
-    Asset ID:
-    <input type="text" name="id" required />
-</label><br><br>
-
-<label>
-    Asset Name:
-    <input type="text" name="name" required />
-</label><br><br>
-
-<label>
-    Purchase Date:
-    <input type="date" name="purchaseDate" required />
-</label><br><br>
-
-<label>
-    Lifespan (years):
-    <input type="number" name="lifespanYears" min="1" required />
-</label><br><br>
-
-<label>
-    Maintenance Interval (days):
-    <input type="number" name="intervalDays" min="1" required />
-</label><br><br>
-
-<label>
-    Last Maintenance Date:
-    <input type="date" name="lastMaintenance" required />
-</label><br><br>
-
-<button type="submit" class="add-button">Save Asset</button>
-</form>
-    </div>
+    <form id="assetForm">
+      <label>Asset ID: <input type="text" name="id" required /></label><br><br>
+      <label>Asset Name: <input type="text" name="name" required /></label><br><br>
+      <label>Purchase Date: <input type="date" name="purchaseDate" required /></label><br><br>
+      <label>Lifespan (years): <input type="number" name="lifespanYears" min="1" required /></label><br><br>
+      <label>Maintenance Interval (days): <input type="number" name="intervalDays" min="1" required /></label><br><br>
+      <label>Last Maintenance Date: <input type="date" name="lastMaintenance" required /></label><br><br>
+      <button type="submit" class="add-button">Save Asset</button>
+    </form>
+  </div>
 </div>
+
+<script>
+  async function loadAssets() {
+    try {
+      const res = await fetch("http://localhost:3000/assets");
+      const assets = await res.json();
+      const tbody = document.getElementById("asset-table-body");
+      tbody.innerHTML = "";
+
+      assets.forEach(asset => {
+  const tr = document.createElement("tr");
+
+  // Highlight status
+  let statusClass = "";
+  if (asset.status?.toLowerCase() === "active") statusClass = "status-active";
+  else if (asset.status?.toLowerCase() === "inactive") statusClass = "status-inactive";
+  else if (asset.status?.toLowerCase().includes("maintenance")) statusClass = "status-maintenance";
+
+tr.innerHTML = `
+    <td>${asset.id}</td>
+    <td><a href="detail.html?sn=${asset.id}" style="color: #00f2fe; text-decoration: underline;">${asset.name}</a></td>
+    <td>${asset.purchaseDate || "—"}</td>
+    <td>${asset.lifespan || "—"}</td>
+    <td>${asset.maintenance_interval || "—"}</td>
+    <td>${asset.maintenance_date ? asset.maintenance_date.split("T")[0] : "—"}</td>
+    <td><span class="${statusClass}">${asset.status || "Unknown"}</span></td>
+    `;
+    tbody.appendChild(tr);
+    });
+        } catch (error) {
+    console.error("Failed to fetch assets:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadAssets);
+</script>
 
 <script src="../assets/script.js"></script>
 </body>

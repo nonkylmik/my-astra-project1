@@ -1,275 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Contact</title>
-<style>
-    @keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
 
 @keyframes iconBounce {
-0% { transform: translateY(0); }
-50% { transform: translateY(-3px); }
-100% { transform: translateY(0); }
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
 }
 
-.fade-in {
-animation: fadeIn 0.6s ease-out both;
+.sidebar a:hover i {
+  animation: iconBounce 0.4s ease;
+  color: #00f2fe;
 }
-
-    * {
-    box-sizing: border-box;
-    }
 
     body {
-font-family: Arial, sans-serif;
-margin: 0;
-background-color: #1e1e2f;
-color: #000000;
-display: flex;
-height: 100vh;
-}
-
-
-    .sidebar {
-    width: 220px;
-    background-color: #2c2c54;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-    }
-
-    .sidebar h2 {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 20px;
-    }
-
-    .sidebar a {
-    padding: 12px 20px;
-    color: white;
-    text-decoration: none;
-    display: block;
-    font-size: 16px;
-    transition: background 0.2s;
-    }
-
-    .sidebar a:hover {
-    background-color: #40407a;
-    }
-
-    .sidebar a:hover i {
-animation: iconBounce 0.4s ease;
-  color: #00f2fe; /* optional glow color */
-}
-
-    .main-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    }
-
-    header {
-    background: linear-gradient(to right, #2c2c54, #706fd3);
-    color: white;
-    padding: 30px 20px;
-    font-size: 24px;
-    font-weight: bold;
-    }
-
-    .breadcrumb {
-    background-color: white;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
-    color: #555;
-    }
-
-    .contact-container {
-    background-color: white;
-    margin: 30px auto;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    width: 90%;
-    max-width: 600px;
-    }
-
-    .contact-container h2 {
-    margin-bottom: 20px;
-    }
-
-    form input, form textarea {
-    width: 100%;
-    padding: 12px;
-    font-size: 14px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    }
-
-    form button {
-    background-color: #2c7be5;
-    color: white;
-    padding: 12px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    }
-
-    form button:hover {
-    background-color: #3864aa;
-    }
-
-    .fade-in {
-    animation: fadeIn 0.6s ease-out both;
-    }
-
-    @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    }
-
-    @media (max-width: 768px) {
-    body {
-        flex-direction: column;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex; /* Align sidebar and content side-by-side */
+      min-height: 100vh;
+      background-color: #1e1e2f;
+      color: white;
     }
 
     .sidebar {
-        flex-direction: row;
-        width: 100%;
-        height: auto;
-        justify-content: space-around;
-    }
-
-    .sidebar a {
-        padding: 10px;
-        font-size: 14px;
-    }
+      width: 220px;
+      background-color: #2c2c54;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
     }
 
     .sidebar-logo {
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 10px 0;
-margin-bottom: 20px;
-width: 100%;
-}
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
 
-.sidebar-logo img {
-max-height: 60px;
-max-width: 120px;
-width: 100%;
-object-fit: contain;
-background-color: #2c2c54;
-padding: 8px;
-border-radius: 12px;
-}
+    .sidebar-logo img {
+      height: 100px;
+      border-radius: 12px;
+      padding: 10px;
+      background-color: #2c2c54;
+    }
 
+    .sidebar a {
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover {
+      background-color: #40407a;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(to right, #2c2c54, #706fd3);
+      color: white;
+      padding: 30px 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
     .social-icons a {
-  color: #f0f0f0; /* soft white base */
-font-size: 18px;
-transition: transform 0.2s ease, color 0.3s ease;
-}
+      color: #f0f0f0;
+      font-size: 18px;
+      margin-left: 10px;
+      transition: transform 0.2s ease, color 0.3s ease;
+    }
 
-.social-icons a:hover {
-transform: scale(1.2);
-color: #e74c3c;
-text-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
-}
+    .social-icons a:hover {
+      transform: scale(1.2);
+      color: #e74c3c;
+      text-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
+    }
 
-.file-upload {
-margin-bottom: 20px;
-display: inline-flex;
-align-items: center;
-gap: 10px;
-font-size: 14px;
-color: #555;
-cursor: pointer;
-position: relative;
-}
+    .breadcrumb {
+      background-color: white;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+      color: #555;
+    }
 
-.file-upload i {
-font-size: 16px;
-color: #2c7be5;
-}
+    .contact-container {
+      background-color: white;
+      margin: 30px auto;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 600px;
+      color: black;
+    }
 
-.file-upload input[type="file"] {
-position: absolute;
-left: 0;
-top: 0;
-opacity: 0;
-width: 100%;
-height: 100%;
-cursor: pointer;
-}
+    form input, form textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
 
-.faq-section {
-margin-top: 40px;
-}
+    form button {
+      background-color: #2c7be5;
+      color: white;
+      padding: 12px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
 
-.faq-section h3 {
-margin-bottom: 20px;
-font-size: 20px;
-color: #2c2c54;
-}
+    form button:hover {
+      background-color: #3864aa;
+    }
 
-.faq-item {
-margin-bottom: 10px;
-border-radius: 8px;
-overflow: hidden;
-box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-background-color: #fff;
-}
+    .file-upload {
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+      position: relative;
+    }
 
-.faq-question {
-width: 100%;
-padding: 14px 20px;
-background-color: #f4f6fa;
-color: #333;
-text-align: left;
-font-size: 15px;
-font-weight: bold;
-border: none;
-cursor: pointer;
-outline: none;
-transition: background 0.3s ease;
-}
+    .file-upload i {
+      font-size: 16px;
+      color: #2c7be5;
+    }
 
-.faq-question:hover {
-background-color: #e7ebf3;
-}
+    .file-upload input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
 
-.faq-answer {
-display: none;
-padding: 15px 20px;
-font-size: 14px;
-background-color: #fff;
-color: #444;
-}
+    .faq-section {
+      margin-top: 40px;
+    }
 
-</style>
+    .faq-section h3 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: #2c2c54;
+    }
+
+    .faq-item {
+      margin-bottom: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      background-color: #fff;
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 14px 20px;
+      background-color: #f4f6fa;
+      color: #333;
+      text-align: left;
+      font-size: 15px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background-color: #e7ebf3;
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 15px 20px;
+      font-size: 14px;
+      background-color: #fff;
+      color: #444;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
+  <!-- Sidebar -->
+  <div class="sidebar">
     <div class="sidebar-logo">
-    <img src="../images/Astra-logo.png" alt="Astra Logo" />
+      <img src="../images/Astra-logo.png" alt="Astra Logo" />
     </div>
     <a href="homepage.html"><i class="fas fa-house"></i> Home</a>
     <a href="asset-list.html"><i class="fas fa-list"></i> Asset List</a>
@@ -279,27 +222,27 @@ color: #444;
     <a href="database.html"><i class="fas fa-database"></i> Database</a>
     <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
     <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
-</div>  
+  </div>
 
-<!-- Main Content -->
-<div class="main-content fade-in">
+  <!-- Main Content -->
+  <div class="main-content fade-in">
     <header>
-    <div class="header-content">
+      <div class="header-content">
         <span>Contact Us</span>
         <div class="social-icons">
-        <a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="#" target="_blank" title="Twitter / X"><i class="fab fa-x-twitter"></i></a>
-        <a href="mailto:you@example.com" title="Email"><i class="fas fa-envelope"></i></a>
-        <a href="#" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="mailto:you@example.com"><i class="fas fa-envelope"></i></a>
+          <a href="#"><i class="fas fa-globe"></i></a>
         </div>
-    </div>
+      </div>
     </header>
 
     <div class="breadcrumb">Home &gt; Contact</div>
 
     <div class="contact-container">
-    <h2>We’d love to hear from you</h2>
-    <form onsubmit="return showSuccessMessage()">
+      <h2>We’d love to hear from you</h2>
+      <form onsubmit="return showSuccessMessage()">
         <label for="name">Your Name</label>
         <input type="text" id="name" placeholder="Enter your name" />
 
@@ -310,82 +253,78 @@ color: #444;
         <textarea id="message" rows="5" placeholder="Write your message here..."></textarea>
 
         <label class="file-upload">
-        <i class="fas fa-paperclip"></i>
-        <span id="fileLabel">Attach a file</span>
-        <input type="file" id="fileInput" onchange="updateFileName()" />
+          <i class="fas fa-paperclip"></i>
+          <span id="fileLabel">Attach a file</span>
+          <input type="file" id="fileInput" onchange="updateFileName()" />
         </label>
 
         <button type="submit">Send Message</button>
         <p id="successMessage" style="color: green; display: none; margin-top: 10px;">✅ Message sent successfully!</p>
-    </form>
+      </form>
 
-    <!-- FAQ Section -->
-    <div class="faq-section">
+      <!-- FAQ Section -->
+      <div class="faq-section">
         <h3>📌 Frequently Asked Questions</h3>
 
         <div class="faq-item">
-        <button class="faq-question">What happens after I send a message?</button>
-        <div class="faq-answer">
+          <button class="faq-question">What happens after I send a message?</button>
+          <div class="faq-answer">
             <p>Your message is forwarded to our support team, and you’ll receive a reply within 24 hours.</p>
-        </div>
+          </div>
         </div>
 
         <div class="faq-item">
-        <button class="faq-question">Can I attach files with my message?</button>
-        <div class="faq-answer">
+          <button class="faq-question">Can I attach files with my message?</button>
+          <div class="faq-answer">
             <p>Yes! You can attach documents or screenshots using the paperclip icon above.</p>
-        </div>
+          </div>
         </div>
 
         <div class="faq-item">
-        <button class="faq-question">Where is your team located?</button>
-        <div class="faq-answer">
+          <button class="faq-question">Where is your team located?</button>
+          <div class="faq-answer">
             <p>We are based in Tallinn, Estonia, but support is available globally.</p>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
-    </div>
-</div>
+  </div>
 
-<!-- Scripts -->
-<script>
+  <!-- Scripts -->
+  <script>
     function updateFileName() {
-    const input = document.getElementById("fileInput");
-    const label = document.getElementById("fileLabel");
-    if (input.files.length > 0) {
-        label.textContent = input.files[0].name;
-    } else {
-        label.textContent = "Attach a file";
-    }
+      const input = document.getElementById("fileInput");
+      const label = document.getElementById("fileLabel");
+      label.textContent = input.files.length > 0 ? input.files[0].name : "Attach a file";
     }
 
     function showSuccessMessage() {
-    document.getElementById("successMessage").style.display = "block";
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("message").value = "";
-    document.getElementById("fileInput").value = "";
-    document.getElementById("fileLabel").textContent = "Attach a file";
-    return false;
+      document.getElementById("successMessage").style.display = "block";
+      document.getElementById("name").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("message").value = "";
+      document.getElementById("fileInput").value = "";
+      document.getElementById("fileLabel").textContent = "Attach a file";
+      return false;
     }
 
-    // FAQ toggle logic
+    // FAQ toggle
     document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.faq-question').forEach(button => {
+      document.querySelectorAll('.faq-question').forEach(button => {
         button.addEventListener('click', () => {
-        const answer = button.nextElementSibling;
-        const open = answer.classList.contains('show');
-        document.querySelectorAll('.faq-answer').forEach(a => {
+          const answer = button.nextElementSibling;
+          const open = answer.classList.contains('show');
+          document.querySelectorAll('.faq-answer').forEach(a => {
             a.style.display = 'none';
             a.classList.remove('show');
-        });
-        if (!open) {
+          });
+          if (!open) {
             answer.style.display = 'block';
             answer.classList.add('show');
-        }
+          }
         });
+      });
     });
-    });
-</script>
+  </script>
 </body>
 </html>

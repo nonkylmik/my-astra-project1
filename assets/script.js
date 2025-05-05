@@ -127,7 +127,12 @@ function getMaintenanceEventsFromDevices() {
 
 // --- Init Everything on Page Load ---
 document.addEventListener("DOMContentLoaded", () => {
-  fetchDevices();
+  const onAssetList = window.location.pathname.includes("asset-list.html");
+
+  if (!onAssetList) {
+    fetchDevices();  // ✅ Only run if we're NOT on asset-list.html
+  }
+
   handleNewAssetSubmit();
   handleRoleRestrictions();
 });

@@ -1,24 +1,32 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const calendarEl = document.getElementById("calendar");
+document.addEventListener("DOMContentLoaded", async function () {
+  const calendarEl = document.getElementById("calendar");
+  if (!calendarEl) return;
 
-    if (!calendarEl) return;
-
-    const calendar = new FullCalendar.Calendar(calendarEl, {
+  const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
-    height: "auto",
-    contentHeight: "auto",
-    expandRows: true,
     headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay"
+      left: "prev,next today",
+      center: "title",
+      right: "dayGridMonth,timeGridWeek,timeGridDay"
     },
-    events: getMaintenanceEventsFromDevices()
-    });
+    events: async function (fetchInfo, successCallback, failureCallback) {
+      try {
+        const res = await fetch("http://localhost:3000/calendar-events");
+        const events = await res.json();
+        successCallback(events);
+      } catch (err) {
+        console.error("Failed to load calendar events", err);
+        failureCallback(err);
+      }
+    },
+    eventClick: function(info) {
+      info.jsEvent.preventDefault(); // Prevent default behavior
+      if (info.event.url) {
+        window.open(info.event.url, "_blank");
+      }
+    }
+  });
 
-    // 🔥 Delay render until layout is stable
-    setTimeout(() => {
-    calendar.render();
-    }, 50); // Try 100 if needed
+  setTimeout(() => calendar.render(), 50);
 });
 
