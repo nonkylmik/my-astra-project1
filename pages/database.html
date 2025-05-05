@@ -137,6 +137,11 @@
       color: black;
       position: relative;
     }
+    .modal label {
+      font-weight: bold;
+      display: block;
+      margin: 12px 0 4px;
+    }
     .modal input {
       width: 100%;
       padding: 8px;
@@ -207,7 +212,7 @@
         <th>ID</th>
         <th>Location</th>
         <th>Status</th>
-        <th>Last Updated</th>
+        <th>Maintenance Due Date</th>
         <th>Delete</th>
       </tr>
     </thead>
@@ -218,11 +223,22 @@
   <div class="modal">
     <span class="close-btn" onclick="closeModal()">&times;</span>
     <h2>Add New Asset</h2>
-    <input type="text" id="name" placeholder="Asset Name" />
-    <input type="text" id="type" placeholder="Asset Type" />
-    <input type="text" id="vendor" placeholder="Vendor" />
-    <input type="text" id="status" placeholder="Status" />
-    <input type="date" id="maintenance_date" placeholder="Maintenance Date" />
+
+    <label for="name">Asset Name</label>
+    <input type="text" id="name" placeholder="Enter asset name" />
+
+    <label for="type">Asset Type</label>
+    <input type="text" id="type" placeholder="Enter asset type" />
+
+    <label for="vendor">Vendor</label>
+    <input type="text" id="vendor" placeholder="Enter vendor name" />
+
+    <label for="status">Status</label>
+    <input type="text" id="status" placeholder="Enter status (e.g., Active)" />
+
+    <label for="maintenance_date">Maintenance Date</label>
+    <input type="date" id="maintenance_date" />
+
     <button onclick="saveAsset()">💾 Save</button>
   </div>
 </div>
