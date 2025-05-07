@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const res = await fetch("http://localhost:3000/calendar-events");
         const data = await res.json();
 
-        // Assign colors based on status
+        // Assign colors based on status and include owner in title
         const events = data.map(event => {
           let color = "#3498db"; // default blue
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
 
           return {
-            title: event.title,
+            title: `${event.title} (${event.owner || "Unknown"})`, // owner
             start: event.start,
             url: event.url,
             color: color
