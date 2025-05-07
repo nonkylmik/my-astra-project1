@@ -7,37 +7,84 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../assets/styles.css" />
   <style>
-  .status-active {
-    background-color: #2ecc71;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    display: inline-block;
-  }
-  .status-inactive {
-    background-color: #e74c3c;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    display: inline-block;
-  }
-  .status-maintenance {
-    background-color: #f1c40f;
-    color: #1e1e2f;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    display: inline-block;
-  }</style>
+    .status-active {
+      background-color: #2ecc71;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+    
+    .status-inactive {
+      background-color: #e74c3c;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .status-maintenance {
+      background-color: #f1c40f;
+      color: #1e1e2f;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .edit-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+
+    .edit-btn:hover {
+      background: #2980b9;
+    }
+
+    .delete-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-left: 6px;
+}
+.delete-btn:hover {
+  background: #c0392b;
+}
+
+.content {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px; /* Ensures table won't shrink below readable size */
+}
+
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  white-space: nowrap; /* Prevents text from wrapping inside cells */
+}
+
+
+  </style>
 </head>
 <body>
-
-<!-- Sidebar -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <img src="../images/Astra-logo.png" alt="Bro Logo" />
@@ -52,17 +99,11 @@
   <a href="users-database.html"><i class="fas fa-user-cog"></i> Manage Users</a>
 </div>
 
-<!-- Main Content -->
 <div class="main-content fade-in">
-  <header>
-    <span class="brand-name">Asset List</span>
-  </header>
-
+  <header><span class="brand-name">Asset List</span></header>
   <div class="breadcrumb">Home &gt; Asset List</div>
-
   <div class="content">
     <button id="addAssetBtn" class="add-button" onclick="openModal()">Add new item</button>
-
     <table>
       <thead>
         <tr>
@@ -72,70 +113,147 @@
           <th>Lifespan Years</th>
           <th>Maintenance Interval (Days)</th>
           <th>Last Maintenance Date</th>
+          <th>Next Maintenance Date</th>
           <th>Status</th>
+          <th>Location</th>
+          <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="asset-table-body">
-        <!-- Dynamic rows injected by JavaScript -->
-      </tbody>
+      <tbody id="asset-table-body"></tbody>
     </table>
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal fade-in" id="modalBox">
     <span class="close-btn" onclick="closeModal()">×</span>
-    <h2>Add New Asset</h2>
+    <h2 id="modalTitle">Add New Asset</h2>
     <form id="assetForm">
-      <label>Asset ID: <input type="text" name="id" required /></label><br><br>
+      <input type="hidden" name="id" id="assetId" />
       <label>Asset Name: <input type="text" name="name" required /></label><br><br>
       <label>Purchase Date: <input type="date" name="purchaseDate" required /></label><br><br>
       <label>Lifespan (years): <input type="number" name="lifespanYears" min="1" required /></label><br><br>
-      <label>Maintenance Interval (days): <input type="number" name="intervalDays" min="1" required /></label><br><br>
+      <label>Maintenance Interval (days): <input type="number" name="maintenance_interval" min="1" required /></label><br><br>
       <label>Last Maintenance Date: <input type="date" name="lastMaintenance" required /></label><br><br>
+      <label>Location: <input type="text" name="location" required /></label><br><br>
       <button type="submit" class="add-button">Save Asset</button>
     </form>
   </div>
 </div>
 
 <script>
+  let editMode = false;
+  let editingId = null;
+
   async function loadAssets() {
-    try {
-      const res = await fetch("http://localhost:3000/assets");
-      const assets = await res.json();
-      const tbody = document.getElementById("asset-table-body");
-      tbody.innerHTML = "";
+    const res = await fetch("http://localhost:3000/assets");
+    const assets = await res.json();
+    const tbody = document.getElementById("asset-table-body");
+    tbody.innerHTML = "";
 
-      assets.forEach(asset => {
-  const tr = document.createElement("tr");
+    assets.forEach(asset => {
+      const tr = document.createElement("tr");
+      let statusClass = "";
+      if (asset.status?.toLowerCase() === "active") statusClass = "status-active";
+      else if (asset.status?.toLowerCase() === "inactive") statusClass = "status-inactive";
+      else if (asset.status?.toLowerCase().includes("maintenance")) statusClass = "status-maintenance";
 
-  // Highlight status
-  let statusClass = "";
-  if (asset.status?.toLowerCase() === "active") statusClass = "status-active";
-  else if (asset.status?.toLowerCase() === "inactive") statusClass = "status-inactive";
-  else if (asset.status?.toLowerCase().includes("maintenance")) statusClass = "status-maintenance";
+      let nextMaintenance = "—";
+      if (asset.maintenance_date && asset.maintenance_interval) {
+        const lastDate = new Date(asset.maintenance_date);
+        lastDate.setDate(lastDate.getDate() + parseInt(asset.maintenance_interval));
+        nextMaintenance = lastDate.toISOString().split("T")[0];
+      }
 
-tr.innerHTML = `
-    <td>${asset.id}</td>
-    <td><a href="detail.html?sn=${asset.id}" style="color: #00f2fe; text-decoration: underline;">${asset.name}</a></td>
-    <td>${asset.purchaseDate || "—"}</td>
-    <td>${asset.lifespan || "—"}</td>
-    <td>${asset.maintenance_interval || "—"}</td>
-    <td>${asset.maintenance_date ? asset.maintenance_date.split("T")[0] : "—"}</td>
-    <td><span class="${statusClass}">${asset.status || "Unknown"}</span></td>
-    `;
-    tbody.appendChild(tr);
-    });
-        } catch (error) {
-    console.error("Failed to fetch assets:", error);
+      tr.innerHTML = `
+        <td>${asset.id}</td>
+        <td><a href="detail.html?sn=${asset.id}" style="color: #00f2fe; text-decoration: underline;">${asset.name}</a></td>
+        <td>${asset.purchaseDate || "—"}</td>
+        <td>${asset.lifespan || "—"}</td>
+        <td>${asset.maintenance_interval || "—"}</td>
+        <td>${asset.maintenance_date ? asset.maintenance_date.split("T")[0] : "—"}</td>
+        <td>${nextMaintenance}</td>
+        <td><span class="${statusClass}">${asset.status || "Unknown"}</span></td>
+        <td>${asset.location || "—"}</td>
+        <td>
+        <button class="edit-btn" onclick='editAsset(${JSON.stringify(asset)})'>Edit</button>
+        <button class="delete-btn" onclick='deleteAsset(${asset.id})'>Delete</button>
+        </td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
+
+  function openModal() {
+    document.getElementById("modalOverlay").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+    document.getElementById("assetForm").reset();
+    editingId = null;
+    editMode = false;
+    document.getElementById("modalTitle").innerText = "Add New Asset";
+  }
+
+  function editAsset(asset) {
+  openModal();
+  editMode = true;
+  editingId = asset.id;
+  document.getElementById("modalTitle").innerText = "Edit Asset";
+
+  document.getElementById("assetId").value = asset.id;
+  document.querySelector("[name='name']").value = asset.name || "";
+  document.querySelector("[name='purchaseDate']").value = asset.purchase_date ? asset.purchase_date.split("T")[0] : "";
+  document.querySelector("[name='lifespanYears']").value = asset.lifespan || "";
+  document.querySelector("[name='maintenance_interval']").value = asset.maintenance_interval || "";
+  document.querySelector("[name='lastMaintenance']").value = asset.maintenance_date ? asset.maintenance_date.split("T")[0] : "";
+  document.querySelector("[name='location']").value = asset.location || "";
 }
 
-document.addEventListener("DOMContentLoaded", loadAssets);
-</script>
+document.getElementById("assetForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const assetData = Object.fromEntries(formData.entries());
 
-<script src="../assets/script.js"></script>
+  const payload = {
+    name: assetData.name,
+    purchase_date: assetData.purchaseDate,
+    lifespan: parseInt(assetData.lifespanYears),
+    maintenance_interval: parseInt(assetData.maintenance_interval),
+    maintenance_date: assetData.lastMaintenance,
+    location: assetData.location
+  };
+
+  if (editMode && editingId) {
+    await fetch(`http://localhost:3000/assets/${editingId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } else {
+    await fetch("http://localhost:3000/assets", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  }
+
+  closeModal();
+  loadAssets();
+});
+
+
+  document.addEventListener("DOMContentLoaded", loadAssets);
+
+  async function deleteAsset(id) {
+  if (confirm("Olete kindlad et soovite kustutada selle vara?")) {
+    await fetch(`http://localhost:3000/assets/${id}`, {
+      method: "DELETE"
+    });
+    loadAssets();
+  }
+}
+</script>
 </body>
 </html>
-
