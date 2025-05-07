@@ -391,14 +391,11 @@
     </div>
   
     <div class="activity-feed">
-      <h3>🕘 Recent Activity</h3>
-      <ul>
-        <li>🛠️ Maintenance scheduled: <strong>Epson Printer</strong> — <em>Today</em></li>
-        <li>➕ New asset added: <strong>MacBook Pro</strong> — <em>1 hour ago</em></li>
-        <li>✅ Checked in: <strong>Dell Desktop</strong> — <em>Yesterday</em></li>
-        <li>🗑️ Retired asset: <strong>Old Server</strong> — <em>2 days ago</em></li>
+      <h3>Recent Activity</h3>
+      <ul id="activityList">
+        <li>Loading activity...</li>
       </ul>
-    </div>
+    </div>    
   
     <div class="chart-container">
       <div class="chart-box"><canvas id="chartType"></canvas><h3>Assets by Type</h3></div>
@@ -551,6 +548,27 @@ themeSwitcher.addEventListener("change", () => {
     }
   </script>
   
+  <script>
+    async function loadRecentActivity() {
+      try {
+        const res = await fetch("http://localhost:3000/activity-log");
+        const data = await res.json();
+        const list = document.getElementById("activityList");
+  
+        list.innerHTML = ""; // Clear old static items
+  
+        data.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.message} (${new Date(item.timestamp).toLocaleString()})`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error("Failed to load activity log:", err);
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", loadRecentActivity);
+  </script>  
   </body>
   </html>
   
