@@ -384,10 +384,15 @@
     </div>
   
     <div class="stats-cards">
-      <div class="card total"><h3>📊 Total Assets</h3><p>22</p></div>
-      <div class="card active"><h3>🟢 Active</h3><p>5</p></div>
-      <div class="card maintenance"><h3>🛠️ Under Maintenance</h3><p>2</p></div>
-      <div class="card retired"><h3>❌ Retired</h3><p>0</p></div>
+      <div class="card active"><h3>🟢 Active</h3><p id="activeAssetCount">0</p></div>
+      <div class="card maintenance"><h3>🛠️ Under Maintenance</h3><p id="maintenanceAssetCount">0</p></div>
+      <div class="card retired"><h3>❌ Retired</h3><p id="retiredAssetCount">0</p></div>
+      <div class="card inactive"><h3>⚪ Inactive</h3><p id="inactiveAssetCount">0</p></div>
+      <div class="card due"><h3>🕒 Due</h3><p id="dueAssetCount">0</p></div>
+      <div class="card value">
+        <h3> Total Assets </h3>
+        <p id="assetCountValue">0 assets — €0</p>
+      </div>      
     </div>
   
     <div class="activity-feed">
@@ -417,129 +422,129 @@
   
   <!-- JavaScript Section -->
   <script>
-    // Chart Setup
-    new Chart(document.getElementById('chartType'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Laptop', 'Desktop', 'Printer'],
-        datasets: [{ data: [21, 17, 5], backgroundColor: ['#f39c12', '#3498db', '#2ecc71'] }]
-      },
-      options: { cutout: '60%', plugins: { legend: { position: 'right' } } }
-    });
+    async function loadAllAssetCharts() {
+      try {
+        const res = await fetch("http://localhost:3000/assets");
+        const assets = await res.json();
   
-    new Chart(document.getElementById('chartOS'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Windows', 'MAC', 'Linux'],
-        datasets: [{ data: [45, 20, 35], backgroundColor: ['#27ae60', '#e67e22', '#f1c40f'] }]
-      },
-      options: { cutout: '60%', plugins: { legend: { position: 'right' } } }
-    });
+        const typeCounts = {};
+        const osCounts = {};
+        const locationCounts = {};
   
-    new Chart(document.getElementById('chartLocation'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Maakri Office', 'Õpik Office', 'Rävala Office'],
-        datasets: [{ data: [45, 20, 35], backgroundColor: ['#1abc9c', '#f39c12', '#f9ca24'] }]
-      },
-      options: { cutout: '60%', plugins: { legend: { position: 'right' } } }
-    });
+        assets.forEach(asset => {
+          const type = asset.type || "Unknown";
   
-    // Search Suggestions
-    const assetSuggestions = [
-      "15” Alienware - Laptop",
-      "Dell Desktop",
-      "Epson EcoTank Printer",
-      "MacBook Pro",
-      "Lenovo ThinkPad",
-      "Office Projector",
-      "Network Switch",
-      "Firewall Appliance"
-    ];
+          // Assign OS based on vendor
+          let os = "Other";
+          const vendor = (asset.vendor || "").toLowerCase();
+          if (["dell", "hp", "lenovo"].includes(vendor)) os = "Windows";
+          else if (vendor === "apple") os = "MAC";
+          else if (vendor === "raspberry") os = "Linux";
   
-    function showSuggestions() {
-      const input = document.getElementById("assetSearch");
-      const list = document.getElementById("suggestionList");
-      const filter = input.value.toLowerCase();
-      list.innerHTML = "";
+          const location = asset.location || "Unknown";
   
-      if (filter === "") {
-        list.classList.remove("show");
-        return;
-      }
+          // Count occurrences
+          typeCounts[type] = (typeCounts[type] || 0) + 1;
+          osCounts[os] = (osCounts[os] || 0) + 1;
+          locationCounts[location] = (locationCounts[location] || 0) + 1;
+        });
   
-      const filtered = assetSuggestions.filter(item => item.toLowerCase().includes(filter));
-  
-      if (filtered.length === 0) {
-        list.classList.remove("show");
-        return;
-      }
-  
-      filtered.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        li.onclick = () => {
-          input.value = item;
-          list.classList.remove("show");
+        const renderChart = (canvasId, dataMap) => {
+          new Chart(document.getElementById(canvasId).getContext("2d"), {
+            type: 'doughnut',
+            data: {
+              labels: Object.keys(dataMap),
+              datasets: [{
+                data: Object.values(dataMap),
+                backgroundColor: Object.keys(dataMap).map((_, i) =>
+                  ['#f39c12', '#3498db', '#2ecc71', '#9b59b6', '#1abc9c', '#e74c3c'][i % 6])
+              }]
+            },
+            options: {
+              cutout: '60%',
+              plugins: {
+                legend: { position: 'right' },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.parsed;
+                      return `${label}: ${value}`;
+                    }
+                  }
+                }
+              }
+            }
+          });
         };
-        list.appendChild(li);
-      });
   
-      list.classList.add("show");
-    }
+        renderChart("chartType", typeCounts);
+        renderChart("chartOS", osCounts);
+        renderChart("chartLocation", locationCounts);
   
-    document.addEventListener("click", function(e) {
-      const bar = document.querySelector(".search-bar");
-      if (!bar.contains(e.target)) {
-        document.getElementById("suggestionList").classList.remove("show");
+      } catch (err) {
+        console.error("❌ Failed to load chart data:", err);
       }
-    });
-  
-    // Logout Modal
-    function logout() {
-      document.getElementById("logoutModal").style.display = "flex";
-    }
-    function closeLogoutModal() {
-      document.getElementById("logoutModal").style.display = "none";
-    }
-    function confirmLogout() {
-      localStorage.removeItem("loggedIn");
-      window.location.href = "../index.html";
     }
   
-    // Theme Switcher
-const themeSwitcher = document.getElementById("themeSwitcher");
-const savedTheme = localStorage.getItem("theme");
+    document.addEventListener("DOMContentLoaded", loadAllAssetCharts);
+  </script>  
 
-if (savedTheme === "dark") {
-  document.documentElement.setAttribute("data-theme", "dark");
-  themeSwitcher.checked = true;
-}
+<script>
+  document.addEventListener("click", function (e) {
+    const bar = document.querySelector(".search-bar");
+    if (!bar.contains(e.target)) {
+      document.getElementById("suggestionList").classList.remove("show");
+    }
+  });
 
-themeSwitcher.addEventListener("change", () => {
-  if (themeSwitcher.checked) {
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
-  } else {
-    document.documentElement.removeAttribute("data-theme");
-    localStorage.setItem("theme", "light");
+  // Logout Modal
+  function logout() {
+    document.getElementById("logoutModal").style.display = "flex";
   }
-});
 
-  
-    // Welcome Message
-    const userRole = localStorage.getItem("role") || "Guest";
-    const welcomeText = document.getElementById("welcomeUser");
-  
-    if (welcomeText) {
-      welcomeText.textContent = `👋 Welcome back, ${userRole.charAt(0).toUpperCase() + userRole.slice(1)}!`;
+  function closeLogoutModal() {
+    document.getElementById("logoutModal").style.display = "none";
+  }
+
+  function confirmLogout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "../index.html";
+  }
+
+  // Theme Switcher
+  const themeSwitcher = document.getElementById("themeSwitcher");
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeSwitcher.checked = true;
+  }
+
+  themeSwitcher.addEventListener("change", () => {
+    if (themeSwitcher.checked) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      localStorage.setItem("theme", "light");
     }
-  
-    // Redirect to login if not logged in
-    if (!localStorage.getItem("isLoggedIn")) {
-      window.location.href = "../index.html";
-    }
-  </script>
+  });
+
+  // Welcome Message
+  const userRole = localStorage.getItem("role") || "Guest";
+  const welcomeText = document.getElementById("welcomeUser");
+
+  if (welcomeText) {
+    welcomeText.textContent = `👋 Welcome back, ${userRole.charAt(0).toUpperCase() + userRole.slice(1)}!`;
+  }
+
+  // Redirect to login if not logged in
+  if (!localStorage.getItem("isLoggedIn")) {
+    window.location.href = "../index.html";
+  }
+</script>
+
   
   <script>
     // Apply saved theme immediately when loading
@@ -568,7 +573,89 @@ themeSwitcher.addEventListener("change", () => {
     }
   
     document.addEventListener("DOMContentLoaded", loadRecentActivity);
-  </script>  
-  </body>
-  </html>
+  </script>
+
+<script>
+  async function loadAssetDashboardStats() {
+    try {
+      const res = await fetch("http://localhost:3000/assets");
+      const assets = await res.json();
+      const lower = s => (s || '').toLowerCase();
+
+      let active = 0, maintenance = 0, retired = 0, inactive = 0, due = 0, totalValue = 0;
+      assets.forEach(asset => {
+        const status = lower(asset.status);
+        if (status === "active") active++;
+        if (status === "maintenance") maintenance++;
+        if (status === "retired") retired++;
+        if (status === "inactive") inactive++;
+        if (status === "due") due++;
+        if (status !== "retired") totalValue += parseFloat(asset.cost) || 0;
+      });
+
+      const assetCount = assets.filter(a => lower(a.status) !== "retired").length;
+
+      document.getElementById("activeAssetCount").textContent = active;
+      document.getElementById("maintenanceAssetCount").textContent = maintenance;
+      document.getElementById("retiredAssetCount").textContent = retired;
+      document.getElementById("inactiveAssetCount").textContent = inactive;
+      document.getElementById("dueAssetCount").textContent = due;
+      document.getElementById("assetCountValue").textContent = `${assetCount} assets — €${totalValue.toFixed(2)}`;
+    } catch (err) {
+      console.error("Failed to load dashboard stats:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadAssetDashboardStats);
+
+  const assetSearchInput = document.getElementById("assetSearch");
+  const suggestionList = document.getElementById("suggestionList");
+  let allAssets = [];
+
+  async function fetchAssets() {
+    try {
+      const res = await fetch("http://localhost:3000/assets");
+      allAssets = await res.json();
+    } catch (err) {
+      console.error("Failed to fetch assets for suggestions:", err);
+    }
+  }
+
+  async function showSuggestions() {
+    const input = assetSearchInput.value.toLowerCase();
+    suggestionList.innerHTML = "";
+
+    if (!input) {
+      suggestionList.classList.remove("show");
+      return;
+    }
+
+    if (allAssets.length === 0) await fetchAssets();
+
+    const filtered = allAssets.filter(asset => asset.name.toLowerCase().includes(input));
+    if (filtered.length === 0) {
+      suggestionList.classList.remove("show");
+      return;
+    }
+
+    filtered.forEach(asset => {
+      const li = document.createElement("li");
+      li.textContent = asset.name;
+      li.onclick = () => {
+        window.location.href = `detail.html?sn=${asset.id}`;
+      };
+      suggestionList.appendChild(li);
+    });
+
+    suggestionList.classList.add("show");
+  }
+
+  document.addEventListener("click", function(e) {
+    if (!document.querySelector(".search-bar").contains(e.target)) {
+      suggestionList.classList.remove("show");
+    }
+  });
+</script>
+</body>
+</html>
   

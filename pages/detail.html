@@ -260,7 +260,58 @@
     .close-btn:hover {
       color: #333;
     }
-  </style>
+
+    .search-bar {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1000;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+#suggestionList {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: none;
+}
+
+#suggestionList li {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+#suggestionList li:hover {
+  background-color: #f0f0f0;
+}
+
+[data-theme="dark"] #suggestionList {
+  background-color: var(--card-bg);
+  color: var(--card-text-color);
+}
+
+[data-theme="dark"] #suggestionList li {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+</style>
 </head>
 <body>
 
@@ -283,6 +334,10 @@
 <div class="main-content">
   <div class="header-content">
     <h1>Asset Detail</h1>
+    <div class="search-bar">
+      <input type="text" id="assetSearch" placeholder="🔍 Search assets..." oninput="showSuggestions()" />
+      <ul id="suggestionList"></ul>
+    </div>    
     <div class="user-bar">
       <div class="user-avatar">A</div>
       <button class="logout-btn" onclick="logout()">Logout</button>
@@ -303,37 +358,156 @@
 <!-- Edit Modal -->
 <div class="modal-overlay" id="editModalOverlay">
   <div class="modal">
-    <span class="close-btn" onclick="closeEditModal()">×</span>
+    <span class="close-btn" onclick="closeEditModal()">&times;</span>
     <h2>Edit Asset</h2>
-    <input type="number" id="editCostPrice" placeholder="Cost (€)" />
-    <input type="number" id="editLifespan" placeholder="Lifespan (Years)" />
-    <input type="text" id="editVendor" placeholder="Vendor" />
-    <button onclick="saveChanges()">💾 Save</button>
+    <form id="editAssetForm">
+      <input type="text" name="name" placeholder="Asset Name" required />
+      <select name="type" required>
+        <option value="">Select type</option>
+        <option value="Laptop">Laptop</option>
+        <option value="Monitor">Monitor</option>
+        <option value="Peripheral">Peripheral</option>
+        <option value="Projector">Projector</option>
+        <option value="Printer">Printer</option>
+        <option value="Scanner">Scanner</option>
+        <option value="Networking">Networking</option>
+        <option value="Storage">Storage</option>
+        <option value="Tablet">Tablet</option>
+        <option value="Microcomputer">Microcomputer</option>
+      </select>
+      <input type="number" name="cost" placeholder="Cost (€)" step="0.01" min="0" required />
+      <select name="vendor" required>
+        <option value="">Select vendor</option>
+        <option value="Dell">Dell</option>
+        <option value="HP">HP</option>
+        <option value="Lenovo">Lenovo</option>
+        <option value="Logitech">Logitech</option>
+        <option value="Apple">Apple</option>
+        <option value="Acer">Acer</option>
+        <option value="Canon">Canon</option>
+        <option value="Samsung">Samsung</option>
+        <option value="Cisco">Cisco</option>
+        <option value="Epson">Epson</option>
+        <option value="Asus">Asus</option>
+        <option value="Microsoft">Microsoft</option>
+        <option value="Raspberry">Raspberry</option>
+        <option value="Other">Other</option>
+      </select>
+      <input type="number" name="lifespan" placeholder="Lifespan (Years)" required />
+      <input type="number" name="maintenance_interval" placeholder="Maintenance Interval (Days)" required />
+      <input type="date" name="maintenance_date" required />
+      <select name="status" required>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+        <option value="Maintenance">Maintenance</option>
+        <option value="Due">Due</option>
+        <option value="Completed">Completed</option>
+        <option value="Retired">Retired</option>
+      </select>
+      <select name="location" required>
+        <option value="">Select location</option>
+        <option value="Tallinn - Office 1">Tallinn - Office 1</option>
+        <option value="Tallinn - Office 2">Tallinn - Office 2</option>
+        <option value="Tallinn - IT Room">Tallinn - IT Room</option>
+        <option value="Tallinn - Server Room">Tallinn - Server Room</option>
+        <option value="Tallinn - Archive Room">Tallinn - Archive Room</option>
+        <option value="Tallinn - Support Desk">Tallinn - Support Desk</option>
+        <option value="Tallinn - Developer Hub">Tallinn - Developer Hub</option>
+        <option value="Tallinn - Meeting Room">Tallinn - Meeting Room</option>
+        <option value="Tallinn - HR Office">Tallinn - HR Office</option>
+        <option value="Tallinn - Break Room">Tallinn - Break Room</option>
+        <option value="Tallinn - Lab">Tallinn - Lab</option>
+        <option value="Other">Other</option>
+      </select>
+      <select name="owner" required>
+        <option value="">Select owner</option>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Eve">Eve</option>
+        <option value="Carol">Carol</option>
+        <option value="Dan">Dan</option>
+        <option value="Frank">Frank</option>
+        <option value="Grace">Grace</option>
+        <option value="Heidi">Heidi</option>
+        <option value="Ivan">Ivan</option>
+        <option value="Judy">Judy</option>
+        <option value="Zoe">Zoe</option>
+      </select>
+      <input type="date" name="purchase_date" required />
+      <button type="submit">📅 Save</button>
+    </form>
   </div>
 </div>
 
 <script>
-  function logout() {
-    localStorage.removeItem("loggedIn");
-    window.location.href = "../index.html";
+  const sn = new URLSearchParams(window.location.search).get("sn");
+  console.log("Loaded asset ID (sn):", sn);
+
+  if (!sn) {
+    document.getElementById("assetDetails").innerHTML = "<p style='color:red;'>Invalid or missing asset ID in URL.</p>";
+    throw new Error("Missing asset ID in URL");
   }
 
-  const themeSwitcher = document.getElementById("themeSwitcher");
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark") {
-    document.documentElement.setAttribute("data-theme", "dark");
-    themeSwitcher.checked = true;
-  }
+  let currentDevice = null; // Store current asset globally
 
-  themeSwitcher?.addEventListener("change", () => {
-    if (themeSwitcher.checked) {
-      document.documentElement.setAttribute("data-theme", "dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-      localStorage.setItem("theme", "light");
+  async function loadAssetDetails() {
+    document.getElementById("assetDetails").innerHTML = "<p>Loading asset details...</p>";
+
+    try {
+      const res = await fetch(`http://localhost:3000/assets/${sn}`);
+
+      if (!res.ok) {
+        if (res.status === 404) {
+          document.getElementById("assetDetails").innerHTML = "<p style='color:red;'>Asset not found (404).</p>";
+        } else {
+          document.getElementById("assetDetails").innerHTML = `<p style='color:red;'>Server error (${res.status}). Please try again later.</p>`;
+        }
+        return;
+      }
+
+      const device = await res.json();
+      currentDevice = device;
+      console.log("Fetched device data:", device);
+
+      document.getElementById("assetDetails").innerHTML = `
+        <p class="detail-warning">This asset is reaching its lifespan and should be replaced!</p>
+        <div class="detail-row">
+          <div class="detail-column">
+            <h3>${device.name}</h3>
+            <p><strong>Asset ID:</strong> ${device.id}</p>
+            <p><strong>Type:</strong> ${device.type || "—"}</p>
+            <p><strong>Cost price:</strong> ${device.cost ? device.cost + "€" : "—"}</p>
+            <p><strong>Vendor:</strong> ${device.vendor || "—"}</p>
+            <p><strong>Lifespan:</strong> ${device.lifespan ? device.lifespan + " years" : "—"}</p>
+            <p><strong>Maintenance Interval:</strong> ${device.maintenance_interval || "—"} days</p>
+            <p><strong>Maintenance Date:</strong> ${device.maintenance_date?.split("T")[0] || "—"}</p>
+            <p><strong>Status:</strong> ${device.status || "—"}</p>
+            <p><strong>Owner:</strong> ${device.owner || "—"}</p>
+            <p><strong>Location:</strong> ${device.location || "—"}</p>
+            <p><strong>Purchase Date:</strong> ${device.purchase_date?.split("T")[0] || "—"}</p>
+            <button class="edit-btn" onclick="openEditModal()">✏️ Edit</button>
+          </div>
+        </div>
+      `;
+
+      const form = document.getElementById("editAssetForm");
+      form.name.value = device.name || "";
+      form.type.value = device.type || "";
+      form.cost.value = device.cost || "";
+      form.vendor.value = device.vendor || "";
+      form.lifespan.value = device.lifespan || "";
+      form.maintenance_interval.value = device.maintenance_interval || "";
+      form.maintenance_date.value = device.maintenance_date?.split("T")[0] || "";
+      form.status.value = device.status || "";
+      form.location.value = device.location || "";
+      form.owner.value = device.owner || "";
+      form.purchase_date.value = device.purchase_date?.split("T")[0] || "";
+
+    } catch (err) {
+      document.getElementById("assetDetails").innerHTML = "<p style='color:red;'>Unexpected error while loading asset.</p>";
+      console.error("Failed to load asset:", err);
     }
-  });
+  }
 
   function openEditModal() {
     document.getElementById("editModalOverlay").style.display = "flex";
@@ -343,77 +517,106 @@
     document.getElementById("editModalOverlay").style.display = "none";
   }
 
-  async function saveChanges() {
-    const cost = document.getElementById("editCostPrice").value;
-    const lifespan = document.getElementById("editLifespan").value;
-    const vendor = document.getElementById("editVendor").value;
-    const id = new URLSearchParams(window.location.search).get("sn");
+  document.getElementById("editAssetForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.cost = parseFloat(data.cost);
+    data.lifespan = parseInt(data.lifespan);
+    data.maintenance_interval = parseInt(data.maintenance_interval);
 
     try {
-      const response = await fetch(`http://localhost:3000/assets/${id}`, {
+      const res = await fetch(`http://localhost:3000/assets/${sn}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cost,
-          lifespan,
-          vendor
-        })
+        body: JSON.stringify(data)
       });
 
-      if (!response.ok) throw new Error("Failed to update asset");
-
+      if (!res.ok) throw new Error("Update failed");
       alert("✅ Asset updated successfully!");
       closeEditModal();
-      location.reload();
-    } catch (error) {
-      console.error(error);
-      alert("❌ Failed to update asset.");
+      loadAssetDetails();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Update failed.");
     }
+  });
+
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "../index.html";
   }
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    const params = new URLSearchParams(window.location.search);
-    const sn = params.get("sn");
-    if (!sn) return;
+  document.addEventListener("DOMContentLoaded", loadAssetDetails);
+</script>
+
+<script>
+  const themeSwitcher = document.getElementById("themeSwitcher");
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeSwitcher.checked = true;
+  }
+
+  themeSwitcher.addEventListener("change", () => {
+    if (themeSwitcher.checked) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      localStorage.setItem("theme", "light");
+    }
+  });
+
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "../index.html";
+  }
+</script>
+
+<script>
+  async function showSuggestions() {
+    const input = document.getElementById("assetSearch");
+    const list = document.getElementById("suggestionList");
+    const filter = input.value.toLowerCase();
+    list.innerHTML = "";
+
+    if (!filter) {
+      list.style.display = "none";
+      return;
+    }
 
     try {
       const res = await fetch("http://localhost:3000/assets");
-      const data = await res.json();
-      const device = data.find(d => d.id == sn);
+      const assets = await res.json();
+      const filtered = assets.filter(asset => asset.name.toLowerCase().includes(filter));
 
-      if (!device) {
-        document.querySelector(".detail-container").innerHTML = "<p style='color:red;'>Device not found!</p>";
+      if (filtered.length === 0) {
+        list.style.display = "none";
         return;
       }
 
-      document.querySelector(".detail-container").innerHTML = `
-        <p class="detail-warning">This asset is reaching its lifespan and should be replaced!</p>
-        <div class="detail-row">
-          <div class="detail-column">
-            <h3>${device.name}</h3>
-            <p><strong>Asset ID:</strong> ${device.id}</p>
-            <p><strong>Cost price:</strong> <span id="costPrice">${device.cost}€</span></p>
-            <p><strong>Created on:</strong> ${device.created}</p>
-            <p><strong>Start service date:</strong> ${device.startServiceDate}</p>
-            <p><strong>Check-in date:</strong> ${device.checkInDate}</p>
-            <p><strong>Lifespan:</strong> <span id="lifespan">${device.lifespan} years</span></p>
-            <p><strong>End of life:</strong> ${device.endOfLife}</p>
-            <p><strong>Vendor:</strong> <span id="vendor">${device.vendor}</span></p>
-            <p><strong>Group:</strong> ${device.group}</p>
-            <p><strong>Purchased on:</strong> ${device.purchased}</p>
-            <button class="edit-btn" onclick="openEditModal()">✏️ Edit</button>
-          </div>
-          <img class="detail-image" src="${device.image || '../images/default.png'}" alt="${device.name}" />
-        </div>
-      `;
+  filtered.forEach(asset => {
+  console.log("Suggestion asset:", asset); // Debug line
+  const li = document.createElement("li");
+  li.textContent = asset.name || `Asset ${asset.id}`; // Fallback in case name is empty
+  li.onclick = () => {
+    window.location.href = `detail.html?sn=${asset.id}`;
+  };
+  list.appendChild(li);
+});
 
-      // Fill modal inputs
-      document.getElementById("editCostPrice").value = device.cost;
-      document.getElementById("editLifespan").value = device.lifespan;
-      document.getElementById("editVendor").value = device.vendor;
-
+      list.style.display = "block";
     } catch (err) {
-      console.error("Failed to fetch device data:", err);
+      console.error("Search failed:", err);
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    const bar = document.querySelector(".search-bar");
+    if (!bar.contains(e.target)) {
+      document.getElementById("suggestionList").style.display = "none";
     }
   });
 </script>
