@@ -454,7 +454,7 @@
     document.getElementById("assetDetails").innerHTML = "<p>Loading asset details...</p>";
 
     try {
-      const res = await fetch(`http://localhost:3000/assets/${sn}`);
+      const res = await fetch(`http://localhost:8080/assets/${sn}`);
 
       if (!res.ok) {
         if (res.status === 404) {
@@ -526,7 +526,7 @@
     data.maintenance_interval = parseInt(data.maintenance_interval);
 
     try {
-      const res = await fetch(`http://localhost:3000/assets/${sn}`, {
+      const res = await fetch(`http://localhost:8080/assets/${sn}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -588,7 +588,7 @@
     }
 
     try {
-      const res = await fetch("http://localhost:3000/assets");
+      const res = await fetch("http://localhost:8080/assets");
       const assets = await res.json();
       const filtered = assets.filter(asset => asset.name.toLowerCase().includes(filter));
 

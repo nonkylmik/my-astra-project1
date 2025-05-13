@@ -228,7 +228,7 @@
   let editingId = null;
 
   async function loadAssets() {
-    const res = await fetch("http://localhost:3000/assets");
+    const res = await fetch("http://localhost:8080/assets");
     const assets = await res.json();
     const tbody = document.getElementById("asset-table-body");
     tbody.innerHTML = "";
@@ -325,13 +325,13 @@
 };
 
     if (editMode && editingId) {
-      await fetch(`http://localhost:3000/assets/${editingId}`, {
+      await fetch(`http://localhost:8080/assets/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
     } else {
-      await fetch("http://localhost:3000/assets", {
+      await fetch("http://localhost:8080/assets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -346,7 +346,7 @@
 
   async function deleteAsset(id) {
     if (confirm("Olete kindlad et soovite kustutada selle vara?")) {
-      await fetch(`http://localhost:3000/assets/${id}`, {
+      await fetch(`http://localhost:8080/assets/${id}`, {
         method: "DELETE"
       });
       loadAssets();

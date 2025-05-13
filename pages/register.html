@@ -168,7 +168,7 @@ if (!role) role = "Külastaja";
 
       const user = { name, email, password, role };
 
-      fetch('http://localhost:3000/users', {
+      fetch('http://localhost:8080/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)

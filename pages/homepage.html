@@ -424,7 +424,7 @@
   <script>
     async function loadAllAssetCharts() {
       try {
-        const res = await fetch("http://localhost:3000/assets");
+        const res = await fetch("http://localhost:8080/assets");
         const assets = await res.json();
   
         const typeCounts = {};
@@ -556,7 +556,7 @@
   <script>
     async function loadRecentActivity() {
       try {
-        const res = await fetch("http://localhost:3000/activity-log");
+        const res = await fetch("http://localhost:8080/activity-log");
         const data = await res.json();
         const list = document.getElementById("activityList");
   
@@ -578,7 +578,7 @@
 <script>
   async function loadAssetDashboardStats() {
     try {
-      const res = await fetch("http://localhost:3000/assets");
+      const res = await fetch("http://localhost:8080/assets");
       const assets = await res.json();
       const lower = s => (s || '').toLowerCase();
 
@@ -614,7 +614,7 @@
 
   async function fetchAssets() {
     try {
-      const res = await fetch("http://localhost:3000/assets");
+      const res = await fetch("http://localhost:8080/assets");
       allAssets = await res.json();
     } catch (err) {
       console.error("Failed to fetch assets for suggestions:", err);

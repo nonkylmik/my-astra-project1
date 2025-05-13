@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     },
     events: async function (fetchInfo, successCallback, failureCallback) {
       try {
-        const res = await fetch("http://localhost:3000/calendar-events");
+        const res = await fetch("http://localhost:8080/calendar-events");
         const data = await res.json();
 
         // Assign colors based on status and include owner in title

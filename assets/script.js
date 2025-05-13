@@ -1,6 +1,6 @@
 console.log("MY-ASTRA is alive!");
 
-const devicesEndpoint = "http://localhost:3000/assets";
+const devicesEndpoint = "http://localhost:8080/assets";
 let editingAssetId = null; // Track which asset is being edited
 
 // --- Modal Logic ---
