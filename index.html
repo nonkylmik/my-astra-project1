@@ -192,21 +192,40 @@
   </div>
 
   <script>
-    function handleLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const error = document.getElementById("errorMessage");
+  function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const error = document.getElementById("errorMessage");
 
-      if (username === "admin" && password === "Git9!PP") {
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("role", "admin");
-        window.location.href = "pages/homepage.html";
-      } else {
-        error.style.display = "block";
-      }
+    // Static admin check (unchanged)
+    if (username === "admin" && password === "Git9!PP") {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("role", "admin");
+      window.location.href = "pages/homepage.html";
+      return;
     }
-  </script>
+
+    // Dynamic login check via FastAPI
+    fetch("http://localhost:8000/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: username, password: password })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Login failed");
+      return res.json();
+    })
+    .then(data => {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("role", data.role || "guest");
+      window.location.href = "pages/homepage.html";
+    })
+    .catch(() => {
+      error.style.display = "block";
+    });
+  }
+</script>
 
 </body>
 </html>

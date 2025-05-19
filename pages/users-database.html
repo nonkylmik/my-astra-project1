@@ -256,8 +256,8 @@
     </div>
 
     <div class="user-list">
-      <h2>Existing Users</h2>
-      <div id="usersContainer"></div>
+    <h2>Existing Users</h2>
+    <div class="existing-users-list"></div> <!-- FastAPI users will load here -->
     </div>
   </div>
 </div>
@@ -329,6 +329,81 @@
       localStorage.setItem("theme", "light");
     }
   });
+</script>
+
+
+<script>
+  // 🔄 Fetch and display users from FastAPI
+  async function fetchUsers() {
+    try {
+      const res = await fetch("http://localhost:8000/users");
+      const users = await res.json();
+
+      const container = document.querySelector(".existing-users-list");
+      container.innerHTML = ""; // Clear any existing content
+
+      users.forEach(user => {
+        const div = document.createElement("div");
+        div.className = "user-row";
+        div.innerHTML = `
+          <strong>${user.name}</strong> (${user.email}) — <em>${user.role}</em>
+          <button class="edit-btn" onclick="editUser('${user.email}')">Edit</button>
+          <button class="delete-btn" onclick="deleteUser('${user.email}')">Delete</button>
+        `;
+        container.appendChild(div);
+      });
+    } catch (err) {
+      console.error("❌ Failed to load users:", err);
+    }
+  }
+
+  // ✏️ Edit user by email via FastAPI
+  function editUser(email) {
+    const newName = prompt("Enter new name for this user:");
+    const newRole = prompt("Enter new role (e.g., Guest, Manager, Technician):");
+
+    if (!newName || !newRole) return alert("Both fields are required!");
+
+    fetch(`http://localhost:8000/users/${encodeURIComponent(email)}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name: newName, role: newRole })
+    })
+      .then(res => {
+        if (res.ok) {
+          fetchUsers(); // refresh UI
+        } else {
+          alert("❌ Failed to update user.");
+        }
+      })
+      .catch(err => {
+        console.error("❌ Edit failed:", err);
+      });
+  }
+
+  // 🗑️ Delete user by email from FastAPI
+  async function deleteUser(email) {
+    if (!confirm(`Are you sure you want to delete ${email}?`)) return;
+
+    try {
+      const res = await fetch(`http://localhost:8000/users/${encodeURIComponent(email)}`, {
+        method: "DELETE"
+      });
+
+      if (res.ok) {
+        fetchUsers(); // refresh user list
+      } else {
+        alert("❌ Failed to delete user.");
+      }
+    } catch (err) {
+      console.error("❌ Delete failed:", err);
+    }
+  }
+
+  // Load FastAPI users on DOM ready
+  document.addEventListener("DOMContentLoaded", fetchUsers);
 </script>
 
 </body>

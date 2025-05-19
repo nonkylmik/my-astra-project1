@@ -124,10 +124,10 @@
 <body>
   <div class="wrapper">
     <form onsubmit="handleRegister(event)">
-      <h2>Registreeru</h2>
+      <h2>Register</h2>
       <div class="input-field">
         <input type="text" id="name" required>
-        <label>Täisnimi</label>
+        <label>Username</label>
       </div>
       <div class="input-field">
         <input type="email" id="email" required>
@@ -135,23 +135,22 @@
       </div>
       <div class="input-field">
         <input type="password" id="password" required>
-        <label>Parool</label>
+        <label>Password</label>
       </div>
       <div class="input-field">
         <select id="role">
-            <option value="" disabled selected hidden>Vali roll (valikuline)</option>
+            <option value="" disabled selected hidden>Choose a role (optional)</option>
             <option value="Guest">Guest</option>
             <option value="Manager">Manager</option>
             <option value="Technician">Technician</option>
           </select>          
-        </select>
-        <label>Roll</label>
+        <label>Role</label>
       </div>
-      <button type="submit">Registreeruge</button>
-      <div id="message" class="success" style="display:none;">Teie konto on loodud!</div>
-      <div id="error" class="error" style="display:none;">Midagi läks valesti. Proovige uuesti.</div>
+      <button type="submit">Register</button>
+      <div id="message" class="success" style="display:none;">Youre account has been created!</div>
+      <div id="error" class="error" style="display:none;">Something went wrong! Try again.</div>
       <div class="login-link">
-        <p>Olete juba kasutaja? <a href="../index.html">Logige sisse</a></p>
+        <p>Are you a user already? <a href="../index.html">Login</a></p>
       </div>
     </form>
   </div>
@@ -164,11 +163,11 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       let role = document.getElementById("role").value;
-if (!role) role = "Külastaja";
+if (!role) role = "Guest";
 
       const user = { name, email, password, role };
 
-      fetch('http://localhost:8080/users', {
+      fetch('http://localhost:8000/users/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
