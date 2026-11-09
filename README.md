@@ -102,5 +102,5 @@
 
 ## 🧑‍💻 Author
 
-Made with ❤️ by [Karl (eestipl2tu)] – Logistics IT Systems Specialist  
+Made with ❤️ by [Karl] – Logistics IT Systems Specialist  
 Feel free to fork, contribute, and report bugs.
